@@ -109,7 +109,7 @@
                     </div>
                     <select x-model="stockFilter" class="sig-input rounded-xl px-3 py-2 text-xs">
                         <option value="all">All Stock</option>
-                        <option value="alerts">Low &amp; Out</option>
+                        <option value="alerts">Low & Out</option>
                         <option value="out">Out of Stock</option>
                         <option value="low">Low Stock</option>
                         <option value="ok">Healthy</option>

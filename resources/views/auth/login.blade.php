@@ -3,7 +3,7 @@
         <div class="sig-card rounded-3xl p-6 sm:p-8">
             <div class="mb-6 space-y-1.5 text-center">
                 <p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-gold-accent">
-                    Signature Salon &amp; Nail Spa
+                    Signature Salon & Nail Spa
                 </p>
                 <h1 class="font-display text-3xl font-semibold tracking-tight text-theme-primary">
                     Welcome Back

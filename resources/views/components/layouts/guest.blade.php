@@ -33,7 +33,7 @@
         </main>
 
         <footer class="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-2 border-t border-theme pt-4 text-xs text-theme-muted sm:flex-row">
-            <p>Signature Salon &amp; Nail Spa · Tagum City</p>
+            <p>Signature Salon & Nail Spa · Tagum City</p>
             <p>PHP (₱) · PHT</p>
         </footer>
     </div>
