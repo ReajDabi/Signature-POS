@@ -25,7 +25,7 @@
     </div>
 @endif
 
-@if ($errors->any())
+@if (isset($errors) && $errors->any())
     <div class="mb-5 rounded-xl border border-rose-500/40 bg-rose-500/12 px-4 py-3 text-sm text-rose-800 dark:text-rose-200" role="alert">
         <div class="flex items-start gap-3">
             <x-ui.icon name="alert" class="mt-0.5 h-5 w-5 shrink-0 text-rose-600 dark:text-rose-400" />
