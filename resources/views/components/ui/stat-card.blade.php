@@ -16,32 +16,32 @@
     };
 @endphp
 
-<div {{ $attributes->merge(['class' => 'sig-card rounded-2xl p-5 flex flex-col justify-between gap-4']) }}>
+<div {{ $attributes->merge(['class' => 'sig-card rounded-2xl p-5 flex flex-col justify-between gap-3.5']) }}>
     <div class="flex items-start justify-between gap-3">
-        <div class="space-y-1">
-            <p class="text-xs font-medium uppercase tracking-[0.14em] text-theme-secondary">
+        <div class="space-y-1.5 min-w-0">
+            <p class="truncate text-xs font-medium text-theme-secondary">
                 {{ $label }}
             </p>
-            <p class="font-display text-3xl font-semibold tracking-tight text-theme-primary tabular-nums">
+            <p class="font-display text-2xl sm:text-[1.75rem] font-semibold tracking-tight text-theme-primary tabular-nums leading-none">
                 {{ $value }}
             </p>
         </div>
 
-        <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gold-soft text-gold-accent border border-theme">
-            <x-ui.icon :name="$icon" class="h-5 w-5" />
+        <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gold-soft text-gold-accent border border-theme">
+            <x-ui.icon :name="$icon" class="h-4.5 w-4.5" />
         </span>
     </div>
 
     @if ($hint || $badge)
-        <div class="flex items-center justify-between gap-2 border-t border-theme pt-3 text-xs">
+        <div class="flex items-center justify-between gap-2 border-t border-theme pt-2.5 text-xs">
             @if ($hint)
-                <span class="text-theme-muted">{{ $hint }}</span>
+                <span class="truncate text-theme-muted">{{ $hint }}</span>
             @else
                 <span></span>
             @endif
 
             @if ($badge)
-                <span class="inline-flex items-center rounded-md border px-2 py-0.5 text-[11px] font-medium {{ $badgeClasses }}">
+                <span class="inline-flex shrink-0 items-center rounded-md border px-2 py-0.5 text-[11px] font-medium {{ $badgeClasses }}">
                     {{ $badge }}
                 </span>
             @endif

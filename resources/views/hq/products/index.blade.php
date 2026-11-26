@@ -1,8 +1,4 @@
-<x-layouts.app
-    title="Global Products"
-    subtitle="Master consumable & ingredient catalog shared across branch inventories"
-    portal="hq"
->
+<x-layouts.app title="Global Products" portal="hq">
     @php
         $initialProducts = [
             ['id' => 1, 'name' => 'Hair Serum 100ml', 'unit' => 'bottle', 'used_in' => 2, 'lowest_status' => 'low', 'lowest_branch' => 'VSV', 'total_qty' => '52.00', 'is_active' => true],
@@ -53,7 +49,7 @@
                         prod.unit = this.form.unit;
                         prod.is_active = this.form.is_active;
                     }
-                    this.notice = `Updated product '${this.form.name.trim()}' in UI preview.`;
+                    this.notice = `${this.form.name.trim()} updated.`;
                 } else {
                     this.products.push({
                         id: Date.now(),
@@ -65,18 +61,14 @@
                         total_qty: '0.00',
                         is_active: this.form.is_active,
                     });
-                    this.notice = `Added global product '${this.form.name.trim()}' in UI preview.`;
+                    this.notice = `${this.form.name.trim()} added.`;
                 }
                 $dispatch('close-modal', 'product-editor');
             },
         }"
         class="space-y-6"
     >
-        <x-ui.section-heading
-            eyebrow="Master Inventory Definitions"
-            title="Global Products Catalog"
-            description="Products are defined once at HQ and stocked individually in branch_inventory per location."
-        >
+        <x-ui.section-heading eyebrow="Master Catalog" title="Global Products">
             <x-slot:actions>
                 <button
                     type="button"
@@ -98,29 +90,29 @@
                 <x-ui.icon name="check" class="h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
                 <span x-text="notice"></span>
             </div>
-            <button type="button" x-on:click="notice = null" class="text-theme-muted hover:text-theme-primary cursor-pointer" aria-label="Dismiss notice">
+            <button type="button" x-on:click="notice = null" class="text-theme-muted hover:text-theme-primary cursor-pointer" aria-label="Dismiss">
                 <x-ui.icon name="close" class="h-4 w-4" />
             </button>
         </div>
 
-        <x-ui.card title="Master Products" subtitle="Lowest cross-branch stock status displayed using 9px box alert badges">
+        <x-ui.card title="Product Directory">
             <x-slot:actions>
-                <div class="flex flex-wrap items-center gap-2.5">
+                <div class="flex flex-wrap items-center gap-2">
                     <div class="relative">
                         <x-ui.icon name="search" class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-theme-muted" />
                         <input
                             type="search"
                             x-model="search"
                             placeholder="Search products…"
-                            class="sig-input rounded-xl py-2 pl-9 pr-3 text-xs w-56"
+                            class="sig-input rounded-xl py-2 pl-9 pr-3 text-xs w-52"
                         >
                     </div>
                     <select x-model="stockFilter" class="sig-input rounded-xl px-3 py-2 text-xs">
-                        <option value="all">All Stock States</option>
-                        <option value="alerts">Low &amp; Out Alerts</option>
-                        <option value="out">Out of Stock Only</option>
-                        <option value="low">Low Stock Only</option>
-                        <option value="ok">Healthy Only</option>
+                        <option value="all">All Stock</option>
+                        <option value="alerts">Low &amp; Out</option>
+                        <option value="out">Out of Stock</option>
+                        <option value="low">Low Stock</option>
+                        <option value="ok">Healthy</option>
                     </select>
                 </div>
             </x-slot:actions>
@@ -129,13 +121,13 @@
                 <table class="w-full text-sm">
                     <thead>
                         <tr class="border-b border-theme">
-                            <th class="pb-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Product Name</th>
-                            <th class="pb-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Unit</th>
-                            <th class="pb-3 text-center text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">BOM Links</th>
-                            <th class="pb-3 text-right text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Network Qty</th>
-                            <th class="pb-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted pl-4">Worst Branch Health</th>
-                            <th class="pb-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Status</th>
-                            <th class="pb-3 text-right text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Actions</th>
+                            <th class="pb-3 text-left text-xs font-medium text-theme-muted">Product</th>
+                            <th class="pb-3 text-left text-xs font-medium text-theme-muted">Unit</th>
+                            <th class="pb-3 text-center text-xs font-medium text-theme-muted">Services</th>
+                            <th class="pb-3 text-right text-xs font-medium text-theme-muted">On Hand</th>
+                            <th class="pb-3 text-left text-xs font-medium text-theme-muted pl-4">Stock Alert</th>
+                            <th class="pb-3 text-left text-xs font-medium text-theme-muted">Status</th>
+                            <th class="pb-3 text-right text-xs font-medium text-theme-muted">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-theme">
@@ -147,11 +139,11 @@
                                     <span
                                         x-show="prod.used_in > 0"
                                         class="inline-flex items-center rounded-full bg-gold-soft px-2.5 py-0.5 text-xs font-semibold text-gold-accent tabular-nums"
-                                        x-text="prod.used_in + ' service' + (prod.used_in > 1 ? 's' : '')"
+                                        x-text="prod.used_in"
                                     ></span>
-                                    <span x-show="prod.used_in === 0" class="text-xs text-theme-muted">Unlinked</span>
+                                    <span x-show="prod.used_in === 0" class="text-xs text-theme-muted">—</span>
                                 </td>
-                                <td class="py-3.5 pr-4 text-right tabular-nums text-theme-secondary" x-text="prod.total_qty + ' ' + prod.unit"></td>
+                                <td class="py-3.5 pr-4 text-right tabular-nums text-theme-secondary" x-text="prod.total_qty"></td>
                                 <td class="py-3.5 pl-4 pr-4">
                                     <span
                                         class="sig-low-stock-badge inline-flex items-center gap-2 border px-2.5 py-1 text-xs font-semibold tracking-wide"
@@ -165,7 +157,7 @@
                                             class="h-1.5 w-1.5 rounded-full shrink-0"
                                             :class="prod.lowest_status === 'out' ? 'bg-rose-500' : (prod.lowest_status === 'low' ? 'bg-amber-500' : 'bg-emerald-500')"
                                         ></span>
-                                        <span x-text="prod.lowest_status === 'out' ? 'Out of Stock' : (prod.lowest_status === 'low' ? 'Low Stock' : 'Healthy Stock')"></span>
+                                        <span x-text="prod.lowest_status === 'out' ? 'Out of Stock' : (prod.lowest_status === 'low' ? 'Low Stock' : 'Healthy')"></span>
                                         <span class="font-mono text-[11px] opacity-80" x-text="'· ' + prod.lowest_branch"></span>
                                     </span>
                                 </td>
@@ -203,7 +195,7 @@
                         </template>
                         <tr x-show="filtered.length === 0" x-cloak>
                             <td colspan="7" class="py-8 text-center text-xs text-theme-muted">
-                                No products match your filter criteria.
+                                No matching products found.
                             </td>
                         </tr>
                     </tbody>
@@ -211,19 +203,14 @@
             </div>
         </x-ui.card>
 
-        {{-- Add / Edit Product Modal --}}
-        <x-ui.modal
-            name="product-editor"
-            title="Master Product Definition"
-            subtitle="Track salon consumables uniformly across all Tagum branches"
-        >
+        <x-ui.modal name="product-editor" title="Product Details">
             <form x-on:submit.prevent="saveProduct()" class="space-y-4">
                 <div>
-                    <label class="mb-1.5 block text-xs font-semibold uppercase tracking-[0.12em] text-theme-secondary">Product Name</label>
-                    <input type="text" x-model="form.name" required class="sig-input w-full rounded-xl px-3.5 py-2.5 text-sm" placeholder="e.g. Hair Color Tube">
+                    <label class="mb-1.5 block text-xs font-medium text-theme-secondary">Product Name</label>
+                    <input type="text" x-model="form.name" required class="sig-input w-full rounded-xl px-3.5 py-2.5 text-sm" placeholder="Hair Color Tube">
                 </div>
                 <div>
-                    <label class="mb-1.5 block text-xs font-semibold uppercase tracking-[0.12em] text-theme-secondary">Unit of Measure</label>
+                    <label class="mb-1.5 block text-xs font-medium text-theme-secondary">Unit</label>
                     <select x-model="form.unit" class="sig-input w-full rounded-xl px-3.5 py-2.5 text-sm">
                         <option value="bottle">bottle</option>
                         <option value="tube">tube</option>
@@ -236,9 +223,9 @@
                 </div>
                 <label class="inline-flex items-center gap-2.5 text-xs text-theme-secondary cursor-pointer select-none">
                     <input type="checkbox" x-model="form.is_active" class="h-4 w-4 rounded border-theme accent-[#d9b77a]">
-                    <span>Product active for BOM mapping and branch restocking</span>
+                    <span>Active</span>
                 </label>
-                <div class="flex justify-end gap-2.5 border-t border-theme pt-4">
+                <div class="flex justify-end gap-2 border-t border-theme pt-4">
                     <button type="button" x-on:click="$dispatch('close-modal', 'product-editor')" class="sig-btn-ghost rounded-xl px-4 py-2 text-xs font-medium cursor-pointer">
                         Cancel
                     </button>

@@ -12,7 +12,7 @@ You are a senior Laravel 13 architect and developer working on **Signature POS (
 
 **Stack & Environment:**
 - **Backend:** PHP 8.3+/8.5, Laravel 13 (`13.43.0`), MySQL 8.4, Redis, Mailpit via **Laravel Sail** (`./vendor/bin/sail`) in Ubuntu WSL (`~/projects/Signature-POS`).
-- **Frontend:** Blade + Tailwind CSS v4 (`@tailwindcss/vite`) + Alpine.js + Chart.js + Vite (`laravel-vite-plugin` with Bunny Fonts: `Cormorant Garamond` and `Inter`).
+- **Frontend:** Blade + Tailwind CSS v4 (`@tailwindcss/vite`) + Alpine.js + Chart.js + Vite (`laravel-vite-plugin` with Bunny Fonts: `Outfit` display + `DM Sans` UI).
 - **Packages & Tooling:** `spatie/laravel-permission`, `laravel/boost`, `laravel/pint`, PHPUnit 12, GitHub Actions ([.github/workflows/ci.yml](file://wsl.localhost/Ubuntu/home/sinner/projects/Signature-POS/.github/workflows/ci.yml)).
 - **Domain Rules:** Currency **PHP (`₱`)**, cash payments only, no VAT in v1, timezone **`Asia/Manila`** *(Note: `config/app.php` currently still has `'UTC'` and must be set to `'Asia/Manila'` during the backend phase)*.
 
@@ -40,9 +40,10 @@ Always read [TEAM_AI_PROMPT.md](docs/TEAM_AI_PROMPT.md), [architecture.md](docs/
   - **Dark Glam (`.dark`, default):** Canvas `#0e0e10`, Surface `#16161a`, Elevated `#1e1e24`, Champagne Gold `#d9b77a` / `#f0dcb1`.
   - **Light Mode (`:root`):** Canvas `#faf7f2`, Surface `#ffffff`, Elevated `#f3ece0`, Burnished Gold `#a97f38` / `#855e20`.
   - Theme state is managed via `localStorage` (`signature-pos-theme`), `Alpine.store('theme')`, and `window.signatureThemePalette()` for live Chart.js re-theming without page reload or flash.
-- **Typography & Layout:**
-  - `Cormorant Garamond` (`font-display`) for headings and KPI numerals; `Inter` (`font-sans`) for UI text; `tabular-nums` for amounts/quantities.
-  - Group related cards under `<x-ui.section-heading />`.
+- **Typography & UI/UX Hierarchy:**
+  - Modern sans pairing: `Outfit` (`font-display`, `-0.02em` tracking) for headings and KPI numerals; `DM Sans` (`font-sans`) for UI text and tables; `tabular-nums` for amounts/quantities.
+  - Minimal, uncluttered copy: no developer/DB jargon (`branch_id`, middleware names, math internals) in UI labels; concise 2–4 word titles; omit redundant card subtitles and section paragraph descriptions.
+  - Group related cards cleanly under `<x-ui.section-heading />` (and combine search/filter controls directly inside the card header with tables).
   - Sidebar navigation uses icons (`<x-ui.icon />`) and labeled groups inside `<x-layouts.app />`.
   - **Low-stock badges must remain boxes with a `9px` border radius** (`<x-ui.low-stock-badge />` / `.sig-low-stock-badge`).
 

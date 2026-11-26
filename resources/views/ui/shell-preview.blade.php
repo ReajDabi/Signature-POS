@@ -1,8 +1,8 @@
 @php
     $portalLabel = match ($portal) {
-        'manager' => 'Branch Manager Shell',
-        'cashier' => 'Branch Cashier POS Shell',
-        default => 'HQ Super Admin Shell',
+        'manager' => 'Branch Manager',
+        'cashier' => 'Branch Cashier',
+        default => 'HQ Super Admin',
     };
 
     $demoInventory = [
@@ -13,18 +13,14 @@
 @endphp
 
 <x-layouts.app
-    title="UI Foundation & Theme System"
-    subtitle="{{ $portalLabel }} · Dark Glam & Champagne Ivory component verification"
+    title="UI Foundation"
+    :subtitle="$portalLabel"
     :portal="$portal"
 >
     <div class="space-y-8">
-        {{-- Section 1: KPI Cards under Labeled Heading --}}
+        {{-- Overview Metrics --}}
         <section class="space-y-4">
-            <x-ui.section-heading
-                eyebrow="Design System · UI Step 1"
-                title="Typography, Cards & Theme Tokens"
-                description="Cormorant Garamond display numerals, Inter UI text, and synchronized Light/Dark switching."
-            >
+            <x-ui.section-heading eyebrow="Overview" title="Key Metrics">
                 <x-slot:actions>
                     <button
                         type="button"
@@ -33,34 +29,34 @@
                         class="sig-btn-gold inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs cursor-pointer"
                     >
                         <x-ui.icon name="plus" class="h-4 w-4" />
-                        <span>Preview Modal</span>
+                        <span>Open Modal</span>
                     </button>
                     <a href="{{ route('login') }}" class="sig-btn-ghost inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-medium">
-                        <span>Back to Login</span>
+                        <span>Sign In</span>
                     </a>
                 </x-slot:actions>
             </x-ui.section-heading>
 
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
                 <x-ui.stat-card
-                    label="Today's Gross Sales"
+                    label="Today's Sales"
                     value="₱ 28,450.00"
-                    hint="Cash-only · No VAT v1"
+                    hint="Cash"
                     icon="cash"
-                    badge="Tagum Network"
+                    badge="All Branches"
                 />
                 <x-ui.stat-card
                     label="Active Branches"
                     value="3"
                     hint="TCC · APK · VSV"
                     icon="branches"
-                    badge="All Online"
+                    badge="Online"
                     badgeTone="emerald"
                 />
                 <x-ui.stat-card
-                    label="Low Stock Alerts"
+                    label="Low Stock"
                     value="4"
-                    hint="At or below threshold"
+                    hint="Items below minimum"
                     icon="inventory"
                     badge="Restock Due"
                     badgeTone="amber"
@@ -68,29 +64,24 @@
                 <x-ui.stat-card
                     label="Pending Payouts"
                     value="₱ 4,120.50"
-                    hint="Flat % per line item"
+                    hint="4 Technicians"
                     icon="technicians"
-                    badge="4 Technicians"
                 />
             </div>
         </section>
 
-        {{-- Section 2: Low-Stock 9px Radius Badges & Statuses --}}
+        {{-- Inventory & Status Group --}}
         <section class="space-y-4">
-            <x-ui.section-heading
-                eyebrow="Inventory & Governance Badges"
-                title="9px Low-Stock Boxes & Status Pills"
-                description="Strict 9px box radius for stock alerts alongside transaction and payout state badges."
-            />
+            <x-ui.section-heading eyebrow="Components" title="Badges & Alerts" />
 
             <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
-                <x-ui.card title="Low-Stock Alert Boxes (9px Radius)" subtitle="Strict 9px box radius stock status indicators">
-                    <div class="space-y-3">
+                <x-ui.card title="Stock Status">
+                    <div class="space-y-2.5">
                         @foreach ($demoInventory as $row)
                             <div class="sig-elevated flex flex-wrap items-center justify-between gap-3 rounded-xl px-4 py-3">
                                 <div>
                                     <p class="text-sm font-medium text-theme-primary">{{ $row['product'] }}</p>
-                                    <p class="text-xs text-theme-muted">Threshold: {{ $row['threshold'] }} {{ $row['unit'] }}</p>
+                                    <p class="text-xs text-theme-muted">Min {{ $row['threshold'] }} {{ $row['unit'] }}</p>
                                 </div>
                                 <x-ui.low-stock-badge :status="$row['status']" :qty="$row['qty']" :unit="$row['unit']" />
                             </div>
@@ -98,7 +89,7 @@
                     </div>
                 </x-ui.card>
 
-                <x-ui.card title="Operational Statuses & Error Reference Banner" subtitle="Consistent across HQ, Branch Manager, and Cashier">
+                <x-ui.card title="Status Pills & Alerts">
                     <div class="space-y-4">
                         <div class="flex flex-wrap gap-2">
                             <x-ui.status-badge status="active" />
@@ -113,11 +104,8 @@
                             <div class="flex items-start gap-3">
                                 <x-ui.icon name="alert" class="mt-0.5 h-5 w-5 shrink-0 text-rose-600 dark:text-rose-400" />
                                 <div>
-                                    <p class="font-medium">Sample BusinessException Banner</p>
-                                    <p class="mt-0.5 text-xs opacity-85">
-                                        Insufficient Rebond Cream stock for requested quantity.
-                                        Reference: <span class="font-mono font-semibold">8K3M9P2Q</span>
-                                    </p>
+                                    <p class="font-medium">Insufficient Rebond Cream stock.</p>
+                                    <p class="mt-0.5 text-xs opacity-80">Ref: <span class="font-mono font-semibold">8K3M9P2Q</span></p>
                                 </div>
                             </div>
                         </div>
@@ -127,13 +115,9 @@
         </section>
     </div>
 
-    <x-ui.modal name="foundation-modal" title="Signature Modal Shell" subtitle="Press Escape or click outside to close">
+    <x-ui.modal name="foundation-modal" title="Sample Modal">
         <div class="space-y-4 text-sm text-theme-secondary">
-            <p>
-                This shared Alpine.js modal container adapts automatically between
-                <span class="font-semibold text-theme-primary">Dark Glam</span> and
-                <span class="font-semibold text-theme-primary">Champagne Light Mode</span>.
-            </p>
+            <p>Press Escape or click outside to dismiss.</p>
             <div class="flex justify-end gap-2 pt-2">
                 <button
                     type="button"
@@ -149,7 +133,7 @@
                     x-on:click="$dispatch('close-modal', 'foundation-modal')"
                     class="sig-btn-gold rounded-xl px-4 py-2 text-xs cursor-pointer"
                 >
-                    Looks Good
+                    Done
                 </button>
             </div>
         </div>

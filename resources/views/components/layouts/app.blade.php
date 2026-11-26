@@ -131,14 +131,14 @@
                         : (Route::has('ui.foundation') ? route('ui.foundation', ['portal' => $portal]) : url('/'));
                 @endphp
                 <a href="{{ $homeUrl }}" class="flex items-center gap-3 min-w-0">
-                    <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-theme-strong bg-gold-soft font-display text-2xl font-semibold text-gold-accent">
+                    <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-theme-strong bg-gold-soft font-display text-xl font-bold text-gold-accent">
                         S
                     </span>
                     <div class="min-w-0">
-                        <p class="truncate font-display text-xl font-semibold tracking-wide text-theme-primary leading-none">
+                        <p class="truncate font-display text-lg font-semibold tracking-tight text-theme-primary leading-none">
                             Signature
                         </p>
-                        <p class="mt-1 truncate text-[10px] font-medium uppercase tracking-[0.2em] text-gold-accent">
+                        <p class="mt-1 truncate text-[10px] font-medium uppercase tracking-[0.18em] text-gold-accent">
                             Styled in the Cloud
                         </p>
                     </div>
@@ -157,15 +157,10 @@
             {{-- Active branch / scope pill --}}
             <div class="px-4 pt-4">
                 <div class="sig-elevated flex items-center justify-between gap-2 rounded-xl px-3.5 py-2.5">
-                    <div class="min-w-0">
-                        <p class="text-[10px] font-semibold uppercase tracking-[0.18em] text-theme-muted">
-                            Active Scope
-                        </p>
-                        <p class="truncate text-xs font-semibold text-theme-primary">
-                            {{ $portalMeta['scopeBadge'] }}
-                        </p>
-                    </div>
-                    <span class="h-2 w-2 shrink-0 rounded-full bg-emerald-500" title="Active tenant context"></span>
+                    <p class="truncate text-xs font-semibold text-theme-primary">
+                        {{ $portalMeta['scopeBadge'] }}
+                    </p>
+                    <span class="h-2 w-2 shrink-0 rounded-full bg-emerald-500" title="Online"></span>
                 </div>
             </div>
 
@@ -253,7 +248,7 @@
                         </button>
 
                         <div class="min-w-0">
-                            <h1 class="truncate font-display text-2xl font-semibold tracking-tight text-theme-primary sm:text-[1.65rem] leading-none">
+                            <h1 class="truncate font-display text-xl font-semibold tracking-tight text-theme-primary sm:text-2xl leading-none">
                                 {{ $title }}
                             </h1>
                             @if ($subtitle)

@@ -1,8 +1,4 @@
-<x-layouts.app
-    title="Global Services & BOM"
-    subtitle="Master salon service catalog and automatic Bill-of-Materials ingredient deduction"
-    portal="hq"
->
+<x-layouts.app title="Global Services & BOM" portal="hq">
     @php
         $initialServices = [
             [
@@ -176,7 +172,7 @@
                         qty_consumed: Number(this.newBom.qty_consumed).toFixed(2),
                     });
                 }
-                this.notice = `Updated BOM recipe for ${target.name} in UI preview.`;
+                this.notice = `Updated BOM for ${target.name}.`;
             },
             removeBomRow(idx) {
                 const target = this.currentBomService;
@@ -202,7 +198,7 @@
                             is_active: this.form.is_active,
                         });
                     }
-                    this.notice = `Updated service '${this.form.name.trim()}' in UI preview.`;
+                    this.notice = `${this.form.name.trim()} updated.`;
                 } else {
                     this.services.push({
                         id: Date.now(),
@@ -215,18 +211,14 @@
                         is_active: this.form.is_active,
                         bom: [],
                     });
-                    this.notice = `Added service '${this.form.name.trim()}' in UI preview.`;
+                    this.notice = `${this.form.name.trim()} added.`;
                 }
                 $dispatch('close-modal', 'service-editor');
             },
         }"
         class="space-y-6"
     >
-        <x-ui.section-heading
-            eyebrow="Master Catalog · BOM Recipes"
-            title="Global Services & Bill of Materials"
-            description="Global services (branch_id = null) sync to all branches; click a chevron or BOM action to inspect ingredients deducted on checkout."
-        >
+        <x-ui.section-heading eyebrow="Master Catalog" title="Global Services & BOM">
             <x-slot:actions>
                 <button
                     type="button"
@@ -239,7 +231,6 @@
             </x-slot:actions>
         </x-ui.section-heading>
 
-        {{-- Notice toast --}}
         <div
             x-show="notice"
             x-cloak
@@ -249,14 +240,14 @@
                 <x-ui.icon name="check" class="h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
                 <span x-text="notice"></span>
             </div>
-            <button type="button" x-on:click="notice = null" class="text-theme-muted hover:text-theme-primary cursor-pointer" aria-label="Dismiss notice">
+            <button type="button" x-on:click="notice = null" class="text-theme-muted hover:text-theme-primary cursor-pointer" aria-label="Dismiss">
                 <x-ui.icon name="close" class="h-4 w-4" />
             </button>
         </div>
 
-        <x-ui.card title="Master Service Directory" subtitle="Expand a service row to view automatic product deductions per unit sold">
+        <x-ui.card title="Service Catalog">
             <x-slot:actions>
-                <div class="flex flex-wrap items-center gap-2.5">
+                <div class="flex flex-wrap items-center gap-2">
                     <div class="inline-flex rounded-xl border border-theme bg-theme-elevated p-0.5 text-xs">
                         @foreach (['All', 'Hair', 'Nail', 'Branch'] as $tab)
                             <button
@@ -265,7 +256,7 @@
                                 :class="category === '{{ $tab }}' ? 'bg-gold-soft text-gold-accent border border-theme-strong' : 'text-theme-secondary border border-transparent'"
                                 class="rounded-lg px-3 py-1 font-medium cursor-pointer transition"
                             >
-                                {{ $tab === 'Branch' ? 'Branch Scoped' : $tab }}
+                                {{ $tab === 'Branch' ? 'Branch Only' : $tab }}
                             </button>
                         @endforeach
                     </div>
@@ -275,7 +266,7 @@
                         <input
                             type="search"
                             x-model="search"
-                            placeholder="Search service…"
+                            placeholder="Search services…"
                             class="sig-input rounded-xl py-1.5 pl-9 pr-3 text-xs w-48"
                         >
                     </div>
@@ -287,14 +278,14 @@
                     <thead>
                         <tr class="border-b border-theme">
                             <th class="pb-3 w-8"></th>
-                            <th class="pb-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Service</th>
-                            <th class="pb-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Category</th>
-                            <th class="pb-3 text-right text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Price</th>
-                            <th class="pb-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted pl-4">Duration</th>
-                            <th class="pb-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">BOM Recipe</th>
-                            <th class="pb-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Scope</th>
-                            <th class="pb-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Status</th>
-                            <th class="pb-3 text-right text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Actions</th>
+                            <th class="pb-3 text-left text-xs font-medium text-theme-muted">Service</th>
+                            <th class="pb-3 text-left text-xs font-medium text-theme-muted">Category</th>
+                            <th class="pb-3 text-right text-xs font-medium text-theme-muted">Price</th>
+                            <th class="pb-3 text-left text-xs font-medium text-theme-muted pl-4">Duration</th>
+                            <th class="pb-3 text-left text-xs font-medium text-theme-muted">BOM</th>
+                            <th class="pb-3 text-left text-xs font-medium text-theme-muted">Scope</th>
+                            <th class="pb-3 text-left text-xs font-medium text-theme-muted">Status</th>
+                            <th class="pb-3 text-right text-xs font-medium text-theme-muted">Actions</th>
                         </tr>
                     </thead>
 
@@ -327,7 +318,7 @@
                                         class="inline-flex items-center gap-1.5 rounded-lg border border-theme px-2.5 py-0.5 text-xs font-medium text-theme-secondary hover:border-theme-strong hover:text-gold-accent cursor-pointer transition"
                                     >
                                         <x-ui.icon name="products" class="h-3.5 w-3.5 text-gold-accent" />
-                                        <span class="tabular-nums" x-text="svc.bom.length ? svc.bom.length + ' ingredient' + (svc.bom.length > 1 ? 's' : '') : 'Add BOM'"></span>
+                                        <span class="tabular-nums" x-text="svc.bom.length ? svc.bom.length + ' items' : 'Set BOM'"></span>
                                     </button>
                                 </td>
                                 <td class="py-3.5 pr-4">
@@ -336,10 +327,8 @@
                                         :class="svc.scope === 'global'
                                             ? 'border-gold-500/30 bg-gold-soft text-gold-accent'
                                             : 'border-theme-strong bg-theme-elevated text-theme-muted'"
-                                    >
-                                        <x-ui.icon name="sparkle" class="h-3 w-3" />
-                                        <span x-text="svc.scope === 'global' ? 'Global' : svc.branch_code"></span>
-                                    </span>
+                                        x-text="svc.scope === 'global' ? 'Global' : svc.branch_code"
+                                    ></span>
                                 </td>
                                 <td class="py-3.5 pr-4">
                                     <span
@@ -373,20 +362,19 @@
                                 </td>
                             </tr>
 
-                            {{-- Expandable BOM Row properly nested inside same <tbody> Alpine scope --}}
                             <tr x-show="expanded && svc.bom.length > 0" x-cloak class="bg-theme-elevated/45">
                                 <td></td>
                                 <td colspan="8" class="py-3 pr-4">
                                     <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
-                                        <p class="text-[11px] font-semibold uppercase tracking-[0.16em] text-gold-accent">
-                                            Bill of Materials · Deducted per Checkout Qty
+                                        <p class="text-[11px] font-semibold uppercase tracking-[0.14em] text-gold-accent">
+                                            Ingredients per Service
                                         </p>
                                         <button
                                             type="button"
                                             x-on:click="openBom(svc)"
                                             class="text-xs font-medium text-gold-accent hover:underline cursor-pointer"
                                         >
-                                            Edit Recipe →
+                                            Edit →
                                         </button>
                                     </div>
                                     <div class="flex flex-wrap gap-2">
@@ -406,7 +394,7 @@
                     <tbody x-show="filtered.length === 0" x-cloak>
                         <tr>
                             <td colspan="9" class="py-8 text-center text-xs text-theme-muted">
-                                No services match your search or category filter.
+                                No matching services found.
                             </td>
                         </tr>
                     </tbody>
@@ -414,21 +402,15 @@
             </div>
         </x-ui.card>
 
-        {{-- Add / Edit Service Modal --}}
-        <x-ui.modal
-            name="service-editor"
-            title="Master Service Details"
-            subtitle="Configure service pricing, duration & catalog visibility"
-            maxWidth="max-w-xl"
-        >
+        <x-ui.modal name="service-editor" title="Service Details" maxWidth="max-w-xl">
             <form x-on:submit.prevent="saveService()" class="space-y-4">
                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div>
-                        <label class="mb-1.5 block text-xs font-semibold uppercase tracking-[0.12em] text-theme-secondary">Service Name</label>
-                        <input type="text" x-model="form.name" required class="sig-input w-full rounded-xl px-3.5 py-2.5 text-sm" placeholder="e.g. Keratin Treatment">
+                        <label class="mb-1.5 block text-xs font-medium text-theme-secondary">Service Name</label>
+                        <input type="text" x-model="form.name" required class="sig-input w-full rounded-xl px-3.5 py-2.5 text-sm" placeholder="Keratin Treatment">
                     </div>
                     <div>
-                        <label class="mb-1.5 block text-xs font-semibold uppercase tracking-[0.12em] text-theme-secondary">Category</label>
+                        <label class="mb-1.5 block text-xs font-medium text-theme-secondary">Category</label>
                         <select x-model="form.category" class="sig-input w-full rounded-xl px-3.5 py-2.5 text-sm">
                             <option value="Hair">Hair</option>
                             <option value="Nail">Nail</option>
@@ -437,25 +419,25 @@
                         </select>
                     </div>
                     <div>
-                        <label class="mb-1.5 block text-xs font-semibold uppercase tracking-[0.12em] text-theme-secondary">Price (₱)</label>
+                        <label class="mb-1.5 block text-xs font-medium text-theme-secondary">Price (₱)</label>
                         <input type="number" step="0.01" min="0" x-model="form.price" required class="sig-input w-full rounded-xl px-3.5 py-2.5 text-sm tabular-nums">
                     </div>
                     <div>
-                        <label class="mb-1.5 block text-xs font-semibold uppercase tracking-[0.12em] text-theme-secondary">Duration (Minutes)</label>
+                        <label class="mb-1.5 block text-xs font-medium text-theme-secondary">Duration (min)</label>
                         <input type="number" min="5" step="5" x-model="form.duration_min" required class="sig-input w-full rounded-xl px-3.5 py-2.5 text-sm tabular-nums">
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div>
-                        <label class="mb-1.5 block text-xs font-semibold uppercase tracking-[0.12em] text-theme-secondary">Catalog Scope</label>
+                        <label class="mb-1.5 block text-xs font-medium text-theme-secondary">Availability</label>
                         <select x-model="form.scope" class="sig-input w-full rounded-xl px-3.5 py-2.5 text-sm">
-                            <option value="global">Global (branch_id = null)</option>
-                            <option value="branch">Branch-specific Override</option>
+                            <option value="global">All Branches</option>
+                            <option value="branch">Single Branch</option>
                         </select>
                     </div>
                     <div x-show="form.scope === 'branch'" x-cloak>
-                        <label class="mb-1.5 block text-xs font-semibold uppercase tracking-[0.12em] text-theme-secondary">Target Branch</label>
+                        <label class="mb-1.5 block text-xs font-medium text-theme-secondary">Branch</label>
                         <select x-model="form.branch_code" class="sig-input w-full rounded-xl px-3.5 py-2.5 text-sm">
                             <option value="TCC">Tagum City Center (TCC)</option>
                             <option value="APK">Apokon (APK)</option>
@@ -466,10 +448,10 @@
 
                 <label class="inline-flex items-center gap-2.5 text-xs text-theme-secondary cursor-pointer select-none">
                     <input type="checkbox" x-model="form.is_active" class="h-4 w-4 rounded border-theme accent-[#d9b77a]">
-                    <span>Service visible in POS terminal catalog</span>
+                    <span>Active</span>
                 </label>
 
-                <div class="flex justify-end gap-2.5 border-t border-theme pt-4">
+                <div class="flex justify-end gap-2 border-t border-theme pt-4">
                     <button type="button" x-on:click="$dispatch('close-modal', 'service-editor')" class="sig-btn-ghost rounded-xl px-4 py-2 text-xs font-medium cursor-pointer">
                         Cancel
                     </button>
@@ -480,27 +462,17 @@
             </form>
         </x-ui.modal>
 
-        {{-- BOM Recipe Modal --}}
-        <x-ui.modal
-            name="bom-editor"
-            title="Bill of Materials Recipe"
-            subtitle="Configure exact decimal product deductions (service_products.qty_consumed)"
-            maxWidth="max-w-xl"
-        >
+        <x-ui.modal name="bom-editor" title="Service Ingredients" maxWidth="max-w-xl">
             <div x-show="currentBomService" class="space-y-4">
                 <div class="sig-elevated rounded-xl px-4 py-3 flex items-center justify-between">
-                    <div>
-                        <p class="text-[11px] font-semibold uppercase tracking-[0.14em] text-theme-muted">Selected Service</p>
-                        <p class="text-sm font-semibold text-theme-primary" x-text="currentBomService?.name"></p>
-                    </div>
+                    <p class="text-sm font-semibold text-theme-primary" x-text="currentBomService?.name"></p>
                     <span class="font-display text-lg font-semibold text-gold-accent tabular-nums" x-text="formatPeso(currentBomService?.price)"></span>
                 </div>
 
                 <div class="space-y-2">
-                    <p class="text-xs font-semibold uppercase tracking-[0.12em] text-theme-secondary">Linked Ingredients</p>
                     <template x-if="currentBomService && currentBomService.bom.length === 0">
                         <p class="rounded-xl border border-dashed border-theme px-4 py-3 text-xs text-theme-muted">
-                            No ingredients mapped yet. Add a product consumption line below.
+                            No ingredients assigned.
                         </p>
                     </template>
                     <template x-for="(row, idx) in (currentBomService?.bom || [])" :key="row.product">
@@ -515,7 +487,6 @@
                 </div>
 
                 <form x-on:submit.prevent="addBomRow()" class="border-t border-theme pt-4 space-y-3">
-                    <p class="text-xs font-semibold uppercase tracking-[0.12em] text-theme-secondary">Add / Update Ingredient Line</p>
                     <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
                         <select x-model="newBom.product" class="sig-input rounded-xl px-3 py-2 text-xs sm:col-span-2">
                             <template x-for="opt in productOptions" :key="opt">
@@ -524,7 +495,7 @@
                         </select>
                         <input type="number" step="0.01" min="0.01" x-model="newBom.qty_consumed" class="sig-input rounded-xl px-3 py-2 text-xs tabular-nums" placeholder="Qty">
                     </div>
-                    <div class="flex justify-end gap-2.5 pt-2">
+                    <div class="flex justify-end gap-2 pt-2">
                         <button type="button" x-on:click="$dispatch('close-modal', 'bom-editor')" class="sig-btn-ghost rounded-xl px-4 py-2 text-xs font-medium cursor-pointer">
                             Done
                         </button>

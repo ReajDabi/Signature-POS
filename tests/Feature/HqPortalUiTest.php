@@ -9,13 +9,13 @@ use Tests\TestCase;
 
 class HqPortalUiTest extends TestCase
 {
-    #[TestWith(['hq.dashboard', '/hq', 'Executive Dashboard', 'Daily Revenue Comparison'])]
+    #[TestWith(['hq.dashboard', '/hq', 'Network Snapshot', 'Daily Revenue'])]
     #[TestWith(['hq.branches.index', '/hq/branches', 'Salon Branches', 'Tagum City Center'])]
-    #[TestWith(['hq.services.index', '/hq/services', 'Global Services & Bill of Materials', 'Hair Color (Full)'])]
-    #[TestWith(['hq.products.index', '/hq/products', 'Global Products Catalog', 'Hair Serum 100ml'])]
-    #[TestWith(['hq.users.index', '/hq/users', 'Users & Role Assignments', 'hq@signature.test'])]
-    #[TestWith(['hq.audit.index', '/hq/audit', 'Network Audit Trail', 'Append-Only'])]
-    #[TestWith(['hq.reports.index', '/hq/reports', 'Cross-Branch Sales & Commission Reports', 'Technician Commission Breakdown'])]
+    #[TestWith(['hq.services.index', '/hq/services', 'Global Services & BOM', 'Hair Color (Full)'])]
+    #[TestWith(['hq.products.index', '/hq/products', 'Global Products', 'Hair Serum 100ml'])]
+    #[TestWith(['hq.users.index', '/hq/users', 'Team & Roles', 'hq@signature.test'])]
+    #[TestWith(['hq.audit.index', '/hq/audit', 'Audit Log', 'Read-Only Ledger'])]
+    #[TestWith(['hq.reports.index', '/hq/reports', 'Sales & Commissions', 'Commission Ledger'])]
     public function test_hq_portal_route_renders_expected_view_and_content(
         string $routeName,
         string $expectedPath,

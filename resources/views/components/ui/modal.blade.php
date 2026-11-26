@@ -40,9 +40,9 @@
     >
         <div class="flex items-start justify-between gap-4 border-b border-theme px-6 py-4">
             <div>
-                <h3 class="font-display text-2xl font-semibold text-theme-primary">{{ $title }}</h3>
+                <h3 class="font-display text-xl font-semibold text-theme-primary">{{ $title }}</h3>
                 @if ($subtitle)
-                    <p class="mt-0.5 text-xs text-theme-secondary">{{ $subtitle }}</p>
+                    <p class="mt-0.5 text-xs text-theme-muted">{{ $subtitle }}</p>
                 @endif
             </div>
             <button

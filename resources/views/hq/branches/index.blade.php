@@ -1,18 +1,13 @@
-<x-layouts.app
-    title="Branches"
-    subtitle="Provision salon branches, codes & active status · Tagum City network"
-    portal="hq"
->
+<x-layouts.app title="Branches" portal="hq">
     @php
         $initialBranches = [
             [
                 'id' => 1,
                 'name' => 'Tagum City Center',
                 'code' => 'TCC',
-                'address' => 'Tagum City Center, National Highway, Tagum City',
-                'manager' => 'Tagum City Center Manager',
+                'address' => 'National Highway, Tagum City',
+                'manager' => 'Ana Reyes',
                 'technicians' => 4,
-                'staff' => 2,
                 'is_active' => true,
             ],
             [
@@ -20,9 +15,8 @@
                 'name' => 'Apokon',
                 'code' => 'APK',
                 'address' => 'Apokon Road, Tagum City',
-                'manager' => 'Apokon Manager',
+                'manager' => 'Belen Cruz',
                 'technicians' => 4,
-                'staff' => 2,
                 'is_active' => true,
             ],
             [
@@ -30,9 +24,8 @@
                 'name' => 'Visayan Village',
                 'code' => 'VSV',
                 'address' => 'Visayan Village, Tagum City',
-                'manager' => 'Visayan Village Manager',
+                'manager' => 'Carmen Diaz',
                 'technicians' => 4,
-                'staff' => 2,
                 'is_active' => true,
             ],
         ];
@@ -66,7 +59,7 @@
             },
             toggleStatus(branch) {
                 branch.is_active = !branch.is_active;
-                this.notice = `${branch.name} (${branch.code}) marked ${branch.is_active ? 'active' : 'inactive'} in UI preview.`;
+                this.notice = `${branch.name} (${branch.code}) ${branch.is_active ? 'activated' : 'deactivated'}.`;
             },
             saveBranch() {
                 if (!this.form.name.trim() || !this.form.code.trim()) {
@@ -81,30 +74,25 @@
                         target.address = this.form.address.trim();
                         target.is_active = this.form.is_active;
                     }
-                    this.notice = `Updated ${this.form.name.trim()} (${cleanCode}) in UI preview.`;
+                    this.notice = `${this.form.name.trim()} updated.`;
                 } else {
                     this.branches.push({
                         id: Date.now(),
                         name: this.form.name.trim(),
                         code: cleanCode,
                         address: this.form.address.trim(),
-                        manager: 'Unassigned Manager',
+                        manager: 'Unassigned',
                         technicians: 0,
-                        staff: 0,
                         is_active: this.form.is_active,
                     });
-                    this.notice = `Added ${this.form.name.trim()} (${cleanCode}) in UI preview.`;
+                    this.notice = `${this.form.name.trim()} added.`;
                 }
                 $dispatch('close-modal', 'branch-editor');
             },
         }"
         class="space-y-6"
     >
-        <x-ui.section-heading
-            eyebrow="Branch Governance"
-            title="Salon Branches"
-            description="Deactivating a branch fails closed across EnforceTenant on manager & cashier requests."
-        >
+        <x-ui.section-heading eyebrow="Governance" title="Salon Branches">
             <x-slot:actions>
                 <button
                     type="button"
@@ -117,7 +105,6 @@
             </x-slot:actions>
         </x-ui.section-heading>
 
-        {{-- Prototype action feedback banner --}}
         <div
             x-show="notice"
             x-cloak
@@ -127,35 +114,27 @@
                 <x-ui.icon name="check" class="h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
                 <span x-text="notice"></span>
             </div>
-            <button type="button" x-on:click="notice = null" class="text-theme-muted hover:text-theme-primary cursor-pointer" aria-label="Dismiss notice">
+            <button type="button" x-on:click="notice = null" class="text-theme-muted hover:text-theme-primary cursor-pointer" aria-label="Dismiss">
                 <x-ui.icon name="close" class="h-4 w-4" />
             </button>
         </div>
 
-        {{-- KPI Summary Strip --}}
-        <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
-            <x-ui.stat-card label="Registered Branches" value="3" hint="Unique name & 12-char code" icon="branches" />
-            <x-ui.stat-card label="Active Branches" value="3" hint="Tenant enforcement active" icon="check" badge="100% Online" badgeTone="emerald" />
-            <x-ui.stat-card label="Total Branch Team" value="18" hint="12 Technicians · 6 Staff" icon="users" />
-        </div>
-
-        {{-- Filter Bar + Table --}}
-        <x-ui.card title="Branch Directory" subtitle="Click status toggle to preview inline branch activation state">
+        <x-ui.card title="All Branches">
             <x-slot:actions>
-                <div class="flex flex-wrap items-center gap-2.5">
+                <div class="flex flex-wrap items-center gap-2">
                     <div class="relative">
                         <x-ui.icon name="search" class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-theme-muted" />
                         <input
                             type="search"
                             x-model="search"
-                            placeholder="Search name, code, address…"
-                            class="sig-input rounded-xl py-2 pl-9 pr-3 text-xs w-56"
+                            placeholder="Search branches…"
+                            class="sig-input rounded-xl py-2 pl-9 pr-3 text-xs w-52"
                         >
                     </div>
                     <select x-model="statusFilter" class="sig-input rounded-xl px-3 py-2 text-xs">
                         <option value="all">All Statuses</option>
-                        <option value="active">Active Only</option>
-                        <option value="inactive">Inactive Only</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
                     </select>
                 </div>
             </x-slot:actions>
@@ -164,13 +143,13 @@
                 <table class="w-full text-sm">
                     <thead>
                         <tr class="border-b border-theme">
-                            <th class="pb-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Branch</th>
-                            <th class="pb-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Code</th>
-                            <th class="pb-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Address</th>
-                            <th class="pb-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Manager</th>
-                            <th class="pb-3 text-center text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Technicians</th>
-                            <th class="pb-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Status</th>
-                            <th class="pb-3 text-right text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Actions</th>
+                            <th class="pb-3 text-left text-xs font-medium text-theme-muted">Branch</th>
+                            <th class="pb-3 text-left text-xs font-medium text-theme-muted">Code</th>
+                            <th class="pb-3 text-left text-xs font-medium text-theme-muted">Address</th>
+                            <th class="pb-3 text-left text-xs font-medium text-theme-muted">Manager</th>
+                            <th class="pb-3 text-center text-xs font-medium text-theme-muted">Team</th>
+                            <th class="pb-3 text-left text-xs font-medium text-theme-muted">Status</th>
+                            <th class="pb-3 text-right text-xs font-medium text-theme-muted">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-theme">
@@ -180,7 +159,7 @@
                                 <td class="py-3.5 pr-4">
                                     <span class="rounded-md bg-gold-soft px-2.5 py-0.5 font-mono text-xs font-semibold text-gold-accent" x-text="branch.code"></span>
                                 </td>
-                                <td class="py-3.5 pr-4 text-theme-secondary max-w-[240px]" x-text="branch.address || '—'"></td>
+                                <td class="py-3.5 pr-4 text-theme-secondary max-w-[220px] truncate" x-text="branch.address || '—'"></td>
                                 <td class="py-3.5 pr-4 text-theme-secondary" x-text="branch.manager"></td>
                                 <td class="py-3.5 pr-4 text-center tabular-nums text-theme-secondary" x-text="branch.technicians"></td>
                                 <td class="py-3.5 pr-4">
@@ -197,7 +176,7 @@
                                         <button
                                             type="button"
                                             x-on:click="toggleStatus(branch)"
-                                            :title="branch.is_active ? 'Deactivate branch' : 'Activate branch'"
+                                            :title="branch.is_active ? 'Deactivate' : 'Activate'"
                                             class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors"
                                             :class="branch.is_active ? 'bg-emerald-500' : 'bg-theme-elevated'"
                                             role="switch"
@@ -221,7 +200,7 @@
                         </template>
                         <tr x-show="filtered.length === 0" x-cloak>
                             <td colspan="7" class="py-8 text-center text-xs text-theme-muted">
-                                No branches match the current search or status filter.
+                                No matching branches found.
                             </td>
                         </tr>
                     </tbody>
@@ -229,39 +208,33 @@
             </div>
         </x-ui.card>
 
-        {{-- Add / Edit Branch Modal --}}
-        <x-ui.modal
-            name="branch-editor"
-            title="Provision / Edit Branch"
-            subtitle="Code is unique across Signature POS (up to 12 characters)"
-            maxWidth="max-w-xl"
-        >
+        <x-ui.modal name="branch-editor" title="Branch Details" maxWidth="max-w-xl">
             <form x-on:submit.prevent="saveBranch()" class="space-y-4">
                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div>
-                        <label class="mb-1.5 block text-xs font-semibold uppercase tracking-[0.12em] text-theme-secondary">Branch Name</label>
-                        <input type="text" x-model="form.name" required class="sig-input w-full rounded-xl px-3.5 py-2.5 text-sm" placeholder="e.g. Magugpo South">
+                        <label class="mb-1.5 block text-xs font-medium text-theme-secondary">Branch Name</label>
+                        <input type="text" x-model="form.name" required class="sig-input w-full rounded-xl px-3.5 py-2.5 text-sm" placeholder="Magugpo South">
                     </div>
                     <div>
-                        <label class="mb-1.5 block text-xs font-semibold uppercase tracking-[0.12em] text-theme-secondary">Branch Code</label>
-                        <input type="text" x-model="form.code" required maxlength="12" class="sig-input w-full rounded-xl px-3.5 py-2.5 text-sm font-mono uppercase" placeholder="e.g. MGS">
+                        <label class="mb-1.5 block text-xs font-medium text-theme-secondary">Branch Code</label>
+                        <input type="text" x-model="form.code" required maxlength="12" class="sig-input w-full rounded-xl px-3.5 py-2.5 text-sm font-mono uppercase" placeholder="MGS">
                     </div>
                 </div>
                 <div>
-                    <label class="mb-1.5 block text-xs font-semibold uppercase tracking-[0.12em] text-theme-secondary">Street &amp; City Address</label>
+                    <label class="mb-1.5 block text-xs font-medium text-theme-secondary">Address</label>
                     <input type="text" x-model="form.address" class="sig-input w-full rounded-xl px-3.5 py-2.5 text-sm" placeholder="Street, Barangay, Tagum City">
                 </div>
                 <label class="inline-flex items-center gap-2.5 text-xs text-theme-secondary cursor-pointer select-none">
                     <input type="checkbox" x-model="form.is_active" class="h-4 w-4 rounded border-theme accent-[#d9b77a]">
-                    <span>Branch active immediately for manager and cashier login</span>
+                    <span>Active</span>
                 </label>
 
-                <div class="flex justify-end gap-2.5 border-t border-theme pt-4">
+                <div class="flex justify-end gap-2 border-t border-theme pt-4">
                     <button type="button" x-on:click="$dispatch('close-modal', 'branch-editor')" class="sig-btn-ghost rounded-xl px-4 py-2 text-xs font-medium cursor-pointer">
                         Cancel
                     </button>
                     <button type="submit" class="sig-btn-gold rounded-xl px-4 py-2 text-xs cursor-pointer">
-                        <span x-text="editingId ? 'Save Changes' : 'Create Branch'"></span>
+                        <span x-text="editingId ? 'Save Changes' : 'Add Branch'"></span>
                     </button>
                 </div>
             </form>

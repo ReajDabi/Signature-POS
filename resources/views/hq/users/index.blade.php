@@ -1,18 +1,14 @@
-<x-layouts.app
-    title="Users & Roles"
-    subtitle="Role assignment and tenant branch scope governance"
-    portal="hq"
->
+<x-layouts.app title="Users & Roles" portal="hq">
     @php
         $initialUsers = [
-            ['id' => 1, 'name' => 'HQ Admin', 'email' => 'hq@signature.test', 'role' => 'hq_admin', 'branch_code' => 'HQ', 'branch_name' => 'HQ Global Scope', 'is_active' => true],
+            ['id' => 1, 'name' => 'HQ Admin', 'email' => 'hq@signature.test', 'role' => 'hq_admin', 'branch_code' => 'HQ', 'branch_name' => 'HQ Global', 'is_active' => true],
             ['id' => 2, 'name' => 'Tagum City Center Manager', 'email' => 'manager.center@signature.test', 'role' => 'branch_manager', 'branch_code' => 'TCC', 'branch_name' => 'Tagum City Center', 'is_active' => true],
             ['id' => 3, 'name' => 'Tagum City Center Cashier', 'email' => 'cashier.center@signature.test', 'role' => 'branch_cashier', 'branch_code' => 'TCC', 'branch_name' => 'Tagum City Center', 'is_active' => true],
             ['id' => 4, 'name' => 'Apokon Manager', 'email' => 'manager.apokon@signature.test', 'role' => 'branch_manager', 'branch_code' => 'APK', 'branch_name' => 'Apokon', 'is_active' => true],
             ['id' => 5, 'name' => 'Apokon Cashier', 'email' => 'cashier.apokon@signature.test', 'role' => 'branch_cashier', 'branch_code' => 'APK', 'branch_name' => 'Apokon', 'is_active' => true],
             ['id' => 6, 'name' => 'Visayan Village Manager', 'email' => 'manager.visayan@signature.test', 'role' => 'branch_manager', 'branch_code' => 'VSV', 'branch_name' => 'Visayan Village', 'is_active' => true],
             ['id' => 7, 'name' => 'Visayan Village Cashier', 'email' => 'cashier.visayan@signature.test', 'role' => 'branch_cashier', 'branch_code' => 'VSV', 'branch_name' => 'Visayan Village', 'is_active' => true],
-            ['id' => 8, 'name' => 'Grace Santos (Former)', 'email' => 'grace.santos@signature.test', 'role' => 'branch_cashier', 'branch_code' => 'TCC', 'branch_name' => 'Tagum City Center', 'is_active' => false],
+            ['id' => 8, 'name' => 'Grace Santos', 'email' => 'grace.santos@signature.test', 'role' => 'branch_cashier', 'branch_code' => 'TCC', 'branch_name' => 'Tagum City Center', 'is_active' => false],
         ];
     @endphp
 
@@ -25,7 +21,7 @@
             notice: null,
             editingId: null,
             form: { name: '', email: '', role: 'branch_cashier', branch_code: 'TCC', password: '', is_active: true },
-            branchNames: { HQ: 'HQ Global Scope', TCC: 'Tagum City Center', APK: 'Apokon', VSV: 'Visayan Village' },
+            branchNames: { HQ: 'HQ Global', TCC: 'Tagum City Center', APK: 'Apokon', VSV: 'Visayan Village' },
             roleLabel(role) {
                 return { hq_admin: 'HQ Super Admin', branch_manager: 'Branch Manager', branch_cashier: 'Branch Cashier' }[role] || role;
             },
@@ -69,7 +65,7 @@
                             is_active: this.form.is_active,
                         });
                     }
-                    this.notice = `Updated ${this.form.name.trim()} (${this.roleLabel(this.form.role)}) in UI preview.`;
+                    this.notice = `${this.form.name.trim()} updated.`;
                 } else {
                     this.users.push({
                         id: Date.now(),
@@ -80,18 +76,14 @@
                         branch_name: branchName,
                         is_active: this.form.is_active,
                     });
-                    this.notice = `Provisioned ${this.form.name.trim()} (${branchName}) in UI preview.`;
+                    this.notice = `${this.form.name.trim()} added.`;
                 }
                 $dispatch('close-modal', 'user-editor');
             },
         }"
         class="space-y-6"
     >
-        <x-ui.section-heading
-            eyebrow="Access Control · Spatie Roles"
-            title="Users & Role Assignments"
-            description="HQ admins run unscoped (branch_id = null). Branch managers and cashiers are pinned to a single active branch."
-        >
+        <x-ui.section-heading eyebrow="Access Control" title="Team & Roles">
             <x-slot:actions>
                 <button
                     type="button"
@@ -113,21 +105,21 @@
                 <x-ui.icon name="check" class="h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
                 <span x-text="notice"></span>
             </div>
-            <button type="button" x-on:click="notice = null" class="text-theme-muted hover:text-theme-primary cursor-pointer" aria-label="Dismiss notice">
+            <button type="button" x-on:click="notice = null" class="text-theme-muted hover:text-theme-primary cursor-pointer" aria-label="Dismiss">
                 <x-ui.icon name="close" class="h-4 w-4" />
             </button>
         </div>
 
-        <x-ui.card title="All User Accounts" subtitle="Filter live by role, branch scope, or email">
+        <x-ui.card title="User Accounts">
             <x-slot:actions>
-                <div class="flex flex-wrap items-center gap-2.5">
+                <div class="flex flex-wrap items-center gap-2">
                     <div class="relative">
                         <x-ui.icon name="search" class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-theme-muted" />
                         <input
                             type="search"
                             x-model="search"
-                            placeholder="Search name or email…"
-                            class="sig-input rounded-xl py-2 pl-9 pr-3 text-xs w-48"
+                            placeholder="Search users…"
+                            class="sig-input rounded-xl py-2 pl-9 pr-3 text-xs w-44"
                         >
                     </div>
                     <select x-model="roleFilter" class="sig-input rounded-xl px-3 py-2 text-xs">
@@ -139,9 +131,9 @@
                     <select x-model="branchFilter" class="sig-input rounded-xl px-3 py-2 text-xs">
                         <option value="all">All Branches</option>
                         <option value="HQ">HQ Global</option>
-                        <option value="TCC">TCC · Tagum City Center</option>
-                        <option value="APK">APK · Apokon</option>
-                        <option value="VSV">VSV · Visayan Village</option>
+                        <option value="TCC">TCC</option>
+                        <option value="APK">APK</option>
+                        <option value="VSV">VSV</option>
                     </select>
                 </div>
             </x-slot:actions>
@@ -150,12 +142,12 @@
                 <table class="w-full text-sm">
                     <thead>
                         <tr class="border-b border-theme">
-                            <th class="pb-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">User</th>
-                            <th class="pb-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Email</th>
-                            <th class="pb-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Role</th>
-                            <th class="pb-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Branch Scope</th>
-                            <th class="pb-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Status</th>
-                            <th class="pb-3 text-right text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Actions</th>
+                            <th class="pb-3 text-left text-xs font-medium text-theme-muted">User</th>
+                            <th class="pb-3 text-left text-xs font-medium text-theme-muted">Email</th>
+                            <th class="pb-3 text-left text-xs font-medium text-theme-muted">Role</th>
+                            <th class="pb-3 text-left text-xs font-medium text-theme-muted">Branch</th>
+                            <th class="pb-3 text-left text-xs font-medium text-theme-muted">Status</th>
+                            <th class="pb-3 text-right text-xs font-medium text-theme-muted">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-theme">
@@ -183,10 +175,7 @@
                                     ></span>
                                 </td>
                                 <td class="py-3.5 pr-4">
-                                    <div class="flex items-center gap-2">
-                                        <span class="rounded-md bg-gold-soft px-2 py-0.5 font-mono text-[11px] font-semibold text-gold-accent" x-text="user.branch_code"></span>
-                                        <span class="text-xs text-theme-secondary" x-text="user.branch_name"></span>
-                                    </div>
+                                    <span class="rounded-md bg-gold-soft px-2 py-0.5 font-mono text-xs font-semibold text-gold-accent" x-text="user.branch_code"></span>
                                 </td>
                                 <td class="py-3.5 pr-4">
                                     <span
@@ -222,7 +211,7 @@
                         </template>
                         <tr x-show="filtered.length === 0" x-cloak>
                             <td colspan="6" class="py-8 text-center text-xs text-theme-muted">
-                                No user accounts match the current filters.
+                                No matching users found.
                             </td>
                         </tr>
                     </tbody>
@@ -230,39 +219,33 @@
             </div>
         </x-ui.card>
 
-        {{-- Add / Edit User Modal --}}
-        <x-ui.modal
-            name="user-editor"
-            title="Account & Role Governance"
-            subtitle="Inactive accounts immediately receive HTTP 403 via EnforceTenant"
-            maxWidth="max-w-xl"
-        >
+        <x-ui.modal name="user-editor" title="User Account" maxWidth="max-w-xl">
             <form x-on:submit.prevent="saveUser()" class="space-y-4">
                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div>
-                        <label class="mb-1.5 block text-xs font-semibold uppercase tracking-[0.12em] text-theme-secondary">Full Name</label>
-                        <input type="text" x-model="form.name" required class="sig-input w-full rounded-xl px-3.5 py-2.5 text-sm" placeholder="First Last">
+                        <label class="mb-1.5 block text-xs font-medium text-theme-secondary">Full Name</label>
+                        <input type="text" x-model="form.name" required class="sig-input w-full rounded-xl px-3.5 py-2.5 text-sm" placeholder="Full Name">
                     </div>
                     <div>
-                        <label class="mb-1.5 block text-xs font-semibold uppercase tracking-[0.12em] text-theme-secondary">Email Address</label>
+                        <label class="mb-1.5 block text-xs font-medium text-theme-secondary">Email</label>
                         <input type="email" x-model="form.email" required class="sig-input w-full rounded-xl px-3.5 py-2.5 text-sm" placeholder="user@signature.test">
                     </div>
                     <div>
-                        <label class="mb-1.5 block text-xs font-semibold uppercase tracking-[0.12em] text-theme-secondary">Role</label>
+                        <label class="mb-1.5 block text-xs font-medium text-theme-secondary">Role</label>
                         <select x-model="form.role" class="sig-input w-full rounded-xl px-3.5 py-2.5 text-sm">
-                            <option value="hq_admin">hq_admin · HQ Super Admin</option>
-                            <option value="branch_manager">branch_manager · Branch Manager</option>
-                            <option value="branch_cashier">branch_cashier · Branch Cashier</option>
+                            <option value="hq_admin">HQ Super Admin</option>
+                            <option value="branch_manager">Branch Manager</option>
+                            <option value="branch_cashier">Branch Cashier</option>
                         </select>
                     </div>
                     <div>
-                        <label class="mb-1.5 block text-xs font-semibold uppercase tracking-[0.12em] text-theme-secondary">Assigned Branch</label>
+                        <label class="mb-1.5 block text-xs font-medium text-theme-secondary">Branch</label>
                         <select
                             x-model="form.branch_code"
                             :disabled="form.role === 'hq_admin'"
                             class="sig-input w-full rounded-xl px-3.5 py-2.5 text-sm disabled:opacity-55"
                         >
-                            <option value="HQ" x-show="form.role === 'hq_admin'">HQ Global Scope (null)</option>
+                            <option value="HQ" x-show="form.role === 'hq_admin'">All Branches (HQ)</option>
                             <option value="TCC">Tagum City Center (TCC)</option>
                             <option value="APK">Apokon (APK)</option>
                             <option value="VSV">Visayan Village (VSV)</option>
@@ -270,15 +253,15 @@
                     </div>
                 </div>
                 <div>
-                    <label class="mb-1.5 block text-xs font-semibold uppercase tracking-[0.12em] text-theme-secondary" x-text="editingId ? 'Reset Password (Optional)' : 'Temporary Password'"></label>
+                    <label class="mb-1.5 block text-xs font-medium text-theme-secondary" x-text="editingId ? 'New Password (Optional)' : 'Password'"></label>
                     <input type="password" x-model="form.password" class="sig-input w-full rounded-xl px-3.5 py-2.5 text-sm" placeholder="Min. 8 characters">
                 </div>
                 <label class="inline-flex items-center gap-2.5 text-xs text-theme-secondary cursor-pointer select-none">
                     <input type="checkbox" x-model="form.is_active" class="h-4 w-4 rounded border-theme accent-[#d9b77a]">
-                    <span>Account active</span>
+                    <span>Active</span>
                 </label>
 
-                <div class="flex justify-end gap-2.5 border-t border-theme pt-4">
+                <div class="flex justify-end gap-2 border-t border-theme pt-4">
                     <button type="button" x-on:click="$dispatch('close-modal', 'user-editor')" class="sig-btn-ghost rounded-xl px-4 py-2 text-xs font-medium cursor-pointer">
                         Cancel
                     </button>

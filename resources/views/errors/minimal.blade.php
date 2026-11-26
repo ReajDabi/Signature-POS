@@ -44,7 +44,7 @@
             place-items: center;
             background: var(--bg);
             color: var(--text);
-            font-family: Inter, system-ui, sans-serif;
+            font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
             padding: 1.5rem;
         }
         main {
@@ -57,7 +57,8 @@
             border-radius: 1.25rem;
         }
         h1 {
-            font-family: "Cormorant Garamond", Georgia, serif;
+            font-family: "Outfit", "DM Sans", ui-sans-serif, system-ui, sans-serif;
+            letter-spacing: -0.025em;
             font-size: 4rem;
             line-height: 1;
             margin: 0 0 0.75rem;

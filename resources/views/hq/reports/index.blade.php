@@ -1,12 +1,8 @@
-<x-layouts.app
-    title="Cross-Branch Reports"
-    subtitle="Sales comparison, flat-% technician commissions & top master services"
-    portal="hq"
->
+<x-layouts.app title="Cross-Branch Reports" portal="hq">
     @php
         $reportPresets = [
             'mtd' => [
-                'label' => 'Month to Date (Nov 1–26, 2026)',
+                'label' => 'Nov 1–26, 2026',
                 'kpis' => [
                     'gross' => '₱ 298,400.00',
                     'discounts' => '₱ 13,650.00',
@@ -21,21 +17,21 @@
                 ],
                 'topServices' => [
                     ['name' => 'Hair Color (Full)', 'category' => 'Hair', 'qty' => 47, 'revenue' => 84600, 'formatted' => '₱ 84,600.00', 'share' => '29.7%'],
-                    ['name' => 'Rebond', 'category' => 'Hair', 'qty' => 25, 'revenue' => 62500, 'formatted' => '₱ 62,500.00', 'share' => '21.9%'],
                     ['name' => 'Gel Polish', 'category' => 'Nail', 'qty' => 144, 'revenue' => 64800, 'formatted' => '₱ 64,800.00', 'share' => '22.8%'],
+                    ['name' => 'Rebond', 'category' => 'Hair', 'qty' => 25, 'revenue' => 62500, 'formatted' => '₱ 62,500.00', 'share' => '21.9%'],
                     ['name' => 'Foot Spa', 'category' => 'Nail', 'qty' => 87, 'revenue' => 43500, 'formatted' => '₱ 43,500.00', 'share' => '15.3%'],
                     ['name' => 'Haircut (Women)', 'category' => 'Hair', 'qty' => 84, 'revenue' => 29350, 'formatted' => '₱ 29,350.00', 'share' => '10.3%'],
                 ],
                 'commissions' => [
-                    ['name' => 'Maria Santos (TCC)', 'rate' => '15.00%', 'items' => 68, 'paid' => 5400, 'unpaid' => 2280, 'total_fmt' => '₱ 7,680.00', 'status' => 'unpaid'],
-                    ['name' => 'Jun Reyes (TCC)', 'rate' => '12.00%', 'items' => 54, 'paid' => 3900, 'unpaid' => 1120, 'total_fmt' => '₱ 5,020.00', 'status' => 'unpaid'],
-                    ['name' => 'Maria Santos (APK)', 'rate' => '15.00%', 'items' => 51, 'paid' => 4800, 'unpaid' => 980, 'total_fmt' => '₱ 5,780.00', 'status' => 'unpaid'],
-                    ['name' => 'Ana Dela Cruz (APK)', 'rate' => '10.00%', 'items' => 62, 'paid' => 3150, 'unpaid' => 0, 'total_fmt' => '₱ 3,150.00', 'status' => 'paid'],
-                    ['name' => 'Liza Mendoza (VSV)', 'rate' => '10.00%', 'items' => 49, 'paid' => 2640, 'unpaid' => 420, 'total_fmt' => '₱ 3,060.00', 'status' => 'unpaid'],
+                    ['name' => 'Maria Santos (TCC)', 'rate' => '15%', 'items' => 68, 'paid' => 5400, 'unpaid' => 2280, 'total_fmt' => '₱ 7,680.00', 'status' => 'unpaid'],
+                    ['name' => 'Maria Santos (APK)', 'rate' => '15%', 'items' => 51, 'paid' => 4800, 'unpaid' => 980, 'total_fmt' => '₱ 5,780.00', 'status' => 'unpaid'],
+                    ['name' => 'Jun Reyes (TCC)', 'rate' => '12%', 'items' => 54, 'paid' => 3900, 'unpaid' => 1120, 'total_fmt' => '₱ 5,020.00', 'status' => 'unpaid'],
+                    ['name' => 'Ana Dela Cruz (APK)', 'rate' => '10%', 'items' => 62, 'paid' => 3150, 'unpaid' => 0, 'total_fmt' => '₱ 3,150.00', 'status' => 'paid'],
+                    ['name' => 'Liza Mendoza (VSV)', 'rate' => '10%', 'items' => 49, 'paid' => 2640, 'unpaid' => 420, 'total_fmt' => '₱ 3,060.00', 'status' => 'unpaid'],
                 ],
             ],
             'week' => [
-                'label' => 'Last 7 Days (Nov 20–26, 2026)',
+                'label' => 'Nov 20–26, 2026',
                 'kpis' => [
                     'gross' => '₱ 108,200.00',
                     'discounts' => '₱ 4,850.00',
@@ -56,15 +52,15 @@
                     ['name' => 'Haircut (Women)', 'category' => 'Hair', 'qty' => 27, 'revenue' => 9550, 'formatted' => '₱ 9,550.00', 'share' => '9.3%'],
                 ],
                 'commissions' => [
-                    ['name' => 'Maria Santos (TCC)', 'rate' => '15.00%', 'items' => 24, 'paid' => 1200, 'unpaid' => 1650, 'total_fmt' => '₱ 2,850.00', 'status' => 'unpaid'],
-                    ['name' => 'Jun Reyes (TCC)', 'rate' => '12.00%', 'items' => 19, 'paid' => 960, 'unpaid' => 840, 'total_fmt' => '₱ 1,800.00', 'status' => 'unpaid'],
-                    ['name' => 'Maria Santos (APK)', 'rate' => '15.00%', 'items' => 18, 'paid' => 1100, 'unpaid' => 980, 'total_fmt' => '₱ 2,080.00', 'status' => 'unpaid'],
-                    ['name' => 'Ana Dela Cruz (APK)', 'rate' => '10.00%', 'items' => 22, 'paid' => 1120, 'unpaid' => 0, 'total_fmt' => '₱ 1,120.00', 'status' => 'paid'],
-                    ['name' => 'Liza Mendoza (VSV)', 'rate' => '10.00%', 'items' => 17, 'paid' => 760, 'unpaid' => 420, 'total_fmt' => '₱ 1,180.00', 'status' => 'unpaid'],
+                    ['name' => 'Maria Santos (TCC)', 'rate' => '15%', 'items' => 24, 'paid' => 1200, 'unpaid' => 1650, 'total_fmt' => '₱ 2,850.00', 'status' => 'unpaid'],
+                    ['name' => 'Maria Santos (APK)', 'rate' => '15%', 'items' => 18, 'paid' => 1100, 'unpaid' => 980, 'total_fmt' => '₱ 2,080.00', 'status' => 'unpaid'],
+                    ['name' => 'Jun Reyes (TCC)', 'rate' => '12%', 'items' => 19, 'paid' => 960, 'unpaid' => 840, 'total_fmt' => '₱ 1,800.00', 'status' => 'unpaid'],
+                    ['name' => 'Ana Dela Cruz (APK)', 'rate' => '10%', 'items' => 22, 'paid' => 1120, 'unpaid' => 0, 'total_fmt' => '₱ 1,120.00', 'status' => 'paid'],
+                    ['name' => 'Liza Mendoza (VSV)', 'rate' => '10%', 'items' => 17, 'paid' => 760, 'unpaid' => 420, 'total_fmt' => '₱ 1,180.00', 'status' => 'unpaid'],
                 ],
             ],
             'today' => [
-                'label' => 'Today (Nov 26, 2026)',
+                'label' => 'Nov 26, 2026',
                 'kpis' => [
                     'gross' => '₱ 18,450.00',
                     'discounts' => '₱ 700.00',
@@ -78,18 +74,18 @@
                     'commissions' => [980, 695, 520],
                 ],
                 'topServices' => [
-                    ['name' => 'Rebond', 'category' => 'Hair', 'qty' => 2, 'revenue' => 5000, 'formatted' => '₱ 5,000.00', 'share' => '28.2%'],
                     ['name' => 'Hair Color (Full)', 'category' => 'Hair', 'qty' => 3, 'revenue' => 5400, 'formatted' => '₱ 5,400.00', 'share' => '30.4%'],
+                    ['name' => 'Rebond', 'category' => 'Hair', 'qty' => 2, 'revenue' => 5000, 'formatted' => '₱ 5,000.00', 'share' => '28.2%'],
                     ['name' => 'Gel Polish', 'category' => 'Nail', 'qty' => 8, 'revenue' => 3600, 'formatted' => '₱ 3,600.00', 'share' => '20.3%'],
                     ['name' => 'Foot Spa', 'category' => 'Nail', 'qty' => 4, 'revenue' => 2000, 'formatted' => '₱ 2,000.00', 'share' => '11.3%'],
                     ['name' => 'Haircut (Women)', 'category' => 'Hair', 'qty' => 5, 'revenue' => 1750, 'formatted' => '₱ 1,750.00', 'share' => '9.8%'],
                 ],
                 'commissions' => [
-                    ['name' => 'Maria Santos (TCC)', 'rate' => '15.00%', 'items' => 4, 'paid' => 0, 'unpaid' => 580, 'total_fmt' => '₱ 580.00', 'status' => 'unpaid'],
-                    ['name' => 'Jun Reyes (TCC)', 'rate' => '12.00%', 'items' => 3, 'paid' => 0, 'unpaid' => 360, 'total_fmt' => '₱ 360.00', 'status' => 'unpaid'],
-                    ['name' => 'Maria Santos (APK)', 'rate' => '15.00%', 'items' => 3, 'paid' => 0, 'unpaid' => 420, 'total_fmt' => '₱ 420.00', 'status' => 'unpaid'],
-                    ['name' => 'Ana Dela Cruz (APK)', 'rate' => '10.00%', 'items' => 4, 'paid' => 275, 'unpaid' => 0, 'total_fmt' => '₱ 275.00', 'status' => 'paid'],
-                    ['name' => 'Liza Mendoza (VSV)', 'rate' => '10.00%', 'items' => 3, 'paid' => 0, 'unpaid' => 290, 'total_fmt' => '₱ 290.00', 'status' => 'unpaid'],
+                    ['name' => 'Maria Santos (TCC)', 'rate' => '15%', 'items' => 4, 'paid' => 0, 'unpaid' => 580, 'total_fmt' => '₱ 580.00', 'status' => 'unpaid'],
+                    ['name' => 'Maria Santos (APK)', 'rate' => '15%', 'items' => 3, 'paid' => 0, 'unpaid' => 420, 'total_fmt' => '₱ 420.00', 'status' => 'unpaid'],
+                    ['name' => 'Jun Reyes (TCC)', 'rate' => '12%', 'items' => 3, 'paid' => 0, 'unpaid' => 360, 'total_fmt' => '₱ 360.00', 'status' => 'unpaid'],
+                    ['name' => 'Ana Dela Cruz (APK)', 'rate' => '10%', 'items' => 4, 'paid' => 275, 'unpaid' => 0, 'total_fmt' => '₱ 275.00', 'status' => 'paid'],
+                    ['name' => 'Liza Mendoza (VSV)', 'rate' => '10%', 'items' => 3, 'paid' => 0, 'unpaid' => 290, 'total_fmt' => '₱ 290.00', 'status' => 'unpaid'],
                 ],
             ],
         ];
@@ -99,33 +95,28 @@
         x-data="hqReportsWorkspace(@js($reportPresets))"
         class="space-y-8"
     >
-        {{-- Section 1: Filter Bar & KPIs --}}
+        {{-- Group 1: Filter Bar & Financial Summary --}}
         <section class="space-y-4">
-            <x-ui.section-heading
-                eyebrow="Consolidated Analytics"
-                title="Cross-Branch Sales & Commission Reports"
-                description="All amounts calculated with bcmath half-up Money math across cash-only completed transactions (no VAT in v1)."
-            >
+            <x-ui.section-heading eyebrow="Summary" title="Sales & Commissions">
                 <x-slot:actions>
                     <button
                         type="button"
-                        x-on:click="exportNotice = `Prepared CSV summary preview for ${activePreset.label}. Backend export endpoint binds in backend-reports-audit.`"
+                        x-on:click="exportNotice = `CSV exported for ${activePreset.label}.`"
                         class="sig-btn-ghost inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-medium cursor-pointer"
                     >
                         <x-ui.icon name="import" class="h-4 w-4 text-gold-accent" />
-                        <span>Export CSV Preview</span>
+                        <span>Export CSV</span>
                     </button>
                 </x-slot:actions>
             </x-ui.section-heading>
 
-            {{-- Filter Strip --}}
-            <div class="sig-card rounded-2xl p-4 flex flex-wrap items-center justify-between gap-4">
+            <div class="sig-card rounded-2xl p-3.5 flex flex-wrap items-center justify-between gap-3">
                 <div class="inline-flex rounded-xl border border-theme bg-theme-elevated p-0.5 text-xs">
                     <button
                         type="button"
                         x-on:click="setPreset('today')"
                         :class="preset === 'today' ? 'bg-gold-soft text-gold-accent border border-theme-strong' : 'text-theme-secondary border border-transparent'"
-                        class="rounded-lg px-3.5 py-1.5 font-medium cursor-pointer transition"
+                        class="rounded-lg px-3 py-1.5 font-medium cursor-pointer transition"
                     >
                         Today
                     </button>
@@ -133,25 +124,24 @@
                         type="button"
                         x-on:click="setPreset('week')"
                         :class="preset === 'week' ? 'bg-gold-soft text-gold-accent border border-theme-strong' : 'text-theme-secondary border border-transparent'"
-                        class="rounded-lg px-3.5 py-1.5 font-medium cursor-pointer transition"
+                        class="rounded-lg px-3 py-1.5 font-medium cursor-pointer transition"
                     >
-                        Last 7 Days
+                        7 Days
                     </button>
                     <button
                         type="button"
                         x-on:click="setPreset('mtd')"
                         :class="preset === 'mtd' ? 'bg-gold-soft text-gold-accent border border-theme-strong' : 'text-theme-secondary border border-transparent'"
-                        class="rounded-lg px-3.5 py-1.5 font-medium cursor-pointer transition"
+                        class="rounded-lg px-3 py-1.5 font-medium cursor-pointer transition"
                     >
                         Month to Date
                     </button>
                 </div>
 
-                <div class="flex flex-wrap items-center gap-2.5 text-xs">
-                    <span class="text-theme-muted">Range (Asia/Manila):</span>
-                    <input type="date" x-model="dateFrom" class="sig-input rounded-xl px-3 py-1.5 text-xs tabular-nums" aria-label="Report start date">
+                <div class="flex flex-wrap items-center gap-2 text-xs">
+                    <input type="date" x-model="dateFrom" class="sig-input rounded-xl px-3 py-1.5 text-xs tabular-nums" aria-label="Start date">
                     <span class="text-theme-muted">to</span>
-                    <input type="date" x-model="dateTo" class="sig-input rounded-xl px-3 py-1.5 text-xs tabular-nums" aria-label="Report end date">
+                    <input type="date" x-model="dateTo" class="sig-input rounded-xl px-3 py-1.5 text-xs tabular-nums" aria-label="End date">
                 </div>
             </div>
 
@@ -164,84 +154,75 @@
                     <x-ui.icon name="check" class="h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
                     <span x-text="exportNotice"></span>
                 </div>
-                <button type="button" x-on:click="exportNotice = null" class="text-theme-muted hover:text-theme-primary cursor-pointer" aria-label="Dismiss notice">
+                <button type="button" x-on:click="exportNotice = null" class="text-theme-muted hover:text-theme-primary cursor-pointer" aria-label="Dismiss">
                     <x-ui.icon name="close" class="h-4 w-4" />
                 </button>
             </div>
 
-            {{-- Dynamic KPI Summary --}}
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                <div class="sig-card rounded-2xl p-5 space-y-2">
-                    <p class="text-xs font-medium uppercase tracking-[0.14em] text-theme-secondary">Gross Service Sales</p>
-                    <p class="font-display text-3xl font-semibold tabular-nums text-theme-primary" x-text="activePreset.kpis.gross"></p>
+                <div class="sig-card rounded-2xl p-5 space-y-1.5">
+                    <p class="text-xs font-medium text-theme-secondary">Gross Sales</p>
+                    <p class="font-display text-2xl sm:text-[1.75rem] font-semibold tabular-nums text-theme-primary" x-text="activePreset.kpis.gross"></p>
                     <p class="text-xs text-theme-muted" x-text="activePreset.label"></p>
                 </div>
-                <div class="sig-card rounded-2xl p-5 space-y-2">
-                    <p class="text-xs font-medium uppercase tracking-[0.14em] text-theme-secondary">Discounts Applied</p>
-                    <p class="font-display text-3xl font-semibold tabular-nums text-theme-primary" x-text="activePreset.kpis.discounts"></p>
-                    <p class="text-xs text-theme-muted">Senior 20% · PWD 20% · Promos</p>
+                <div class="sig-card rounded-2xl p-5 space-y-1.5">
+                    <p class="text-xs font-medium text-theme-secondary">Discounts</p>
+                    <p class="font-display text-2xl sm:text-[1.75rem] font-semibold tabular-nums text-theme-primary" x-text="activePreset.kpis.discounts"></p>
+                    <p class="text-xs text-theme-muted">Senior · PWD · Promo</p>
                 </div>
-                <div class="sig-card rounded-2xl p-5 space-y-2">
-                    <p class="text-xs font-medium uppercase tracking-[0.14em] text-theme-secondary">Net Collected Revenue</p>
-                    <p class="font-display text-3xl font-semibold tabular-nums text-gold-accent" x-text="activePreset.kpis.net"></p>
-                    <p class="text-xs text-theme-muted">subtotal − discount (cash)</p>
+                <div class="sig-card rounded-2xl p-5 space-y-1.5">
+                    <p class="text-xs font-medium text-theme-secondary">Net Revenue</p>
+                    <p class="font-display text-2xl sm:text-[1.75rem] font-semibold tabular-nums text-gold-accent" x-text="activePreset.kpis.net"></p>
+                    <p class="text-xs text-theme-muted">Cash collected</p>
                 </div>
-                <div class="sig-card rounded-2xl p-5 space-y-2">
-                    <p class="text-xs font-medium uppercase tracking-[0.14em] text-theme-secondary">Technician Commissions</p>
-                    <p class="font-display text-3xl font-semibold tabular-nums text-theme-primary" x-text="activePreset.kpis.commissions"></p>
-                    <p class="text-xs text-theme-muted">Flat % on discounted line total</p>
+                <div class="sig-card rounded-2xl p-5 space-y-1.5">
+                    <p class="text-xs font-medium text-theme-secondary">Commissions</p>
+                    <p class="font-display text-2xl sm:text-[1.75rem] font-semibold tabular-nums text-theme-primary" x-text="activePreset.kpis.commissions"></p>
+                    <p class="text-xs text-theme-muted">Technician earnings</p>
                 </div>
             </div>
         </section>
 
-        {{-- Section 2: Charts Grid --}}
+        {{-- Group 2: Charts --}}
         <section class="space-y-4">
-            <x-ui.section-heading
-                eyebrow="Visual Breakdown"
-                title="Branch Revenue & Top Services"
-                description="Switch between Today, Last 7 Days, and Month to Date above to watch charts and ledgers update."
-            />
+            <x-ui.section-heading eyebrow="Performance" title="Branch & Service Charts" />
 
-            <div class="grid grid-cols-1 gap-6 xl:grid-cols-2">
-                <x-ui.card title="Branch Revenue Comparison" subtitle="Gross, Net Revenue, and Commissions per branch (₱)">
-                    <div class="relative h-72 w-full">
+            <div class="grid grid-cols-1 gap-5 xl:grid-cols-2">
+                <x-ui.card title="Revenue by Branch">
+                    <div class="relative h-64 w-full">
                         <canvas x-ref="branchCanvas" aria-label="Branch revenue comparison chart"></canvas>
                     </div>
                 </x-ui.card>
 
-                <x-ui.card title="Top Services by Revenue" subtitle="Master catalog service ranking across all branches (₱)">
-                    <div class="relative h-72 w-full">
+                <x-ui.card title="Top Services">
+                    <div class="relative h-64 w-full">
                         <canvas x-ref="serviceCanvas" aria-label="Top services horizontal bar chart"></canvas>
                     </div>
                 </x-ui.card>
             </div>
         </section>
 
-        {{-- Section 3: Commissions Chart + Data Tables --}}
+        {{-- Group 3: Commissions & Breakdown Tables --}}
         <section class="space-y-4">
-            <x-ui.section-heading
-                eyebrow="Payout & Catalog Tables"
-                title="Technician Commission Ledger & Top Service Performance"
-                description="Paid vs unpaid technician payouts derived from one-technician-per-line-item commission tracking."
-            />
+            <x-ui.section-heading eyebrow="Breakdowns" title="Technician Commissions & Services" />
 
-            <div class="grid grid-cols-1 gap-6 xl:grid-cols-12">
-                <x-ui.card title="Commission Payouts by Technician" subtitle="Paid vs Pending balance (₱)" class="xl:col-span-5">
-                    <div class="relative h-72 w-full">
+            <div class="grid grid-cols-1 gap-5 xl:grid-cols-12">
+                <x-ui.card title="Commission Payouts" class="xl:col-span-5">
+                    <div class="relative h-64 w-full">
                         <canvas x-ref="commissionCanvas" aria-label="Commission payouts stacked bar chart"></canvas>
                     </div>
                 </x-ui.card>
 
-                <x-ui.card title="Technician Commission Breakdown" subtitle="Selected window payout status" class="xl:col-span-7">
+                <x-ui.card title="Commission Ledger" class="xl:col-span-7">
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm">
                             <thead>
                                 <tr class="border-b border-theme">
-                                    <th class="pb-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Technician</th>
-                                    <th class="pb-3 text-right text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Rate</th>
-                                    <th class="pb-3 text-right text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Line Items</th>
-                                    <th class="pb-3 text-right text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Total Earned</th>
-                                    <th class="pb-3 text-right text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Status</th>
+                                    <th class="pb-3 text-left text-xs font-medium text-theme-muted">Technician</th>
+                                    <th class="pb-3 text-right text-xs font-medium text-theme-muted">Rate</th>
+                                    <th class="pb-3 text-right text-xs font-medium text-theme-muted">Items</th>
+                                    <th class="pb-3 text-right text-xs font-medium text-theme-muted">Earned</th>
+                                    <th class="pb-3 text-right text-xs font-medium text-theme-muted">Status</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-theme">
@@ -268,17 +249,16 @@
                 </x-ui.card>
             </div>
 
-            {{-- Top Services Detailed Table --}}
-            <x-ui.card title="Top Performing Services" subtitle="Ranked by net revenue contribution across all branches">
+            <x-ui.card title="Top Services Breakdown">
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm">
                         <thead>
                             <tr class="border-b border-theme">
-                                <th class="pb-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Service Name</th>
-                                <th class="pb-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Category</th>
-                                <th class="pb-3 text-right text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Units Sold</th>
-                                <th class="pb-3 text-right text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Share %</th>
-                                <th class="pb-3 text-right text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Net Revenue</th>
+                                <th class="pb-3 text-left text-xs font-medium text-theme-muted">Service</th>
+                                <th class="pb-3 text-left text-xs font-medium text-theme-muted">Category</th>
+                                <th class="pb-3 text-right text-xs font-medium text-theme-muted">Sold</th>
+                                <th class="pb-3 text-right text-xs font-medium text-theme-muted">Share</th>
+                                <th class="pb-3 text-right text-xs font-medium text-theme-muted">Net Revenue</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-theme">
@@ -353,8 +333,8 @@
                                 data: {
                                     labels: data.branchChart.labels,
                                     datasets: [
-                                        { label: 'Gross Sales', data: data.branchChart.gross, backgroundColor: p.champagne, borderRadius: 6 },
-                                        { label: 'Net Revenue', data: data.branchChart.net, backgroundColor: p.gold, borderRadius: 6 },
+                                        { label: 'Gross', data: data.branchChart.gross, backgroundColor: p.champagne, borderRadius: 6 },
+                                        { label: 'Net', data: data.branchChart.net, backgroundColor: p.gold, borderRadius: 6 },
                                         { label: 'Commissions', data: data.branchChart.commissions, backgroundColor: p.emerald, borderRadius: 6 },
                                     ],
                                 },
@@ -362,12 +342,12 @@
                                     responsive: true,
                                     maintainAspectRatio: false,
                                     plugins: {
-                                        legend: { labels: { color: p.legend, boxWidth: 10, usePointStyle: true, font: { family: 'Inter', size: 11 } } },
+                                        legend: { labels: { color: p.legend, boxWidth: 10, usePointStyle: true, font: { family: 'DM Sans', size: 11 } } },
                                         tooltip: { callbacks: { label: (ctx) => ` ${ctx.dataset.label}: ₱ ${Number(ctx.parsed.y).toLocaleString('en-PH')}` } },
                                     },
                                     scales: {
-                                        x: { ticks: { color: p.tick, font: { family: 'Inter', size: 11 } }, grid: { display: false } },
-                                        y: { ticks: { color: p.tick, font: { family: 'Inter', size: 11 }, callback: (v) => `₱${(v / 1000).toFixed(0)}k` }, grid: { color: p.grid } },
+                                        x: { ticks: { color: p.tick, font: { family: 'DM Sans', size: 11 } }, grid: { display: false } },
+                                        y: { ticks: { color: p.tick, font: { family: 'DM Sans', size: 11 }, callback: (v) => `₱${(v / 1000).toFixed(0)}k` }, grid: { color: p.grid } },
                                     },
                                 },
                             });
@@ -379,7 +359,7 @@
                                 data: {
                                     labels: data.topServices.map((s) => s.name),
                                     datasets: [
-                                        { label: 'Net Revenue (₱)', data: data.topServices.map((s) => s.revenue), backgroundColor: p.gold, borderRadius: 6 },
+                                        { label: 'Revenue (₱)', data: data.topServices.map((s) => s.revenue), backgroundColor: p.gold, borderRadius: 6 },
                                     ],
                                 },
                                 options: {
@@ -391,8 +371,8 @@
                                         tooltip: { callbacks: { label: (ctx) => ` ₱ ${Number(ctx.parsed.x).toLocaleString('en-PH')}` } },
                                     },
                                     scales: {
-                                        x: { ticks: { color: p.tick, font: { family: 'Inter', size: 11 }, callback: (v) => `₱${(v / 1000).toFixed(0)}k` }, grid: { color: p.grid } },
-                                        y: { ticks: { color: p.legend, font: { family: 'Inter', size: 11 } }, grid: { display: false } },
+                                        x: { ticks: { color: p.tick, font: { family: 'DM Sans', size: 11 }, callback: (v) => `₱${(v / 1000).toFixed(0)}k` }, grid: { color: p.grid } },
+                                        y: { ticks: { color: p.legend, font: { family: 'DM Sans', size: 11 } }, grid: { display: false } },
                                     },
                                 },
                             });
@@ -412,12 +392,12 @@
                                     responsive: true,
                                     maintainAspectRatio: false,
                                     plugins: {
-                                        legend: { labels: { color: p.legend, boxWidth: 10, usePointStyle: true, font: { family: 'Inter', size: 11 } } },
+                                        legend: { labels: { color: p.legend, boxWidth: 10, usePointStyle: true, font: { family: 'DM Sans', size: 11 } } },
                                         tooltip: { callbacks: { label: (ctx) => ` ${ctx.dataset.label}: ₱ ${Number(ctx.parsed.y).toLocaleString('en-PH')}` } },
                                     },
                                     scales: {
-                                        x: { stacked: true, ticks: { color: p.tick, font: { family: 'Inter', size: 10 } }, grid: { display: false } },
-                                        y: { stacked: true, ticks: { color: p.tick, font: { family: 'Inter', size: 11 }, callback: (v) => `₱${v.toLocaleString('en-PH')}` }, grid: { color: p.grid } },
+                                        x: { stacked: true, ticks: { color: p.tick, font: { family: 'DM Sans', size: 10 } }, grid: { display: false } },
+                                        y: { stacked: true, ticks: { color: p.tick, font: { family: 'DM Sans', size: 11 }, callback: (v) => `₱${v.toLocaleString('en-PH')}` }, grid: { color: p.grid } },
                                     },
                                 },
                             });

@@ -12,14 +12,14 @@
 
         <header class="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-between gap-4">
             <a href="{{ route('login') }}" class="inline-flex items-center gap-3 group">
-                <span class="flex h-10 w-10 items-center justify-center rounded-xl border border-theme-strong bg-gold-soft font-display text-2xl font-semibold text-gold-accent transition group-hover:scale-105">
+                <span class="flex h-10 w-10 items-center justify-center rounded-xl border border-theme-strong bg-gold-soft font-display text-xl font-bold text-gold-accent transition group-hover:scale-105">
                     S
                 </span>
                 <div>
-                    <span class="block font-display text-xl font-semibold tracking-wide text-theme-primary leading-none">
+                    <span class="block font-display text-lg font-semibold tracking-tight text-theme-primary leading-none">
                         Signature
                     </span>
-                    <span class="mt-1 block text-[10px] font-medium uppercase tracking-[0.22em] text-gold-accent">
+                    <span class="mt-1 block text-[10px] font-medium uppercase tracking-[0.2em] text-gold-accent">
                         Styled in the Cloud
                     </span>
                 </div>
@@ -34,7 +34,7 @@
 
         <footer class="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-2 border-t border-theme pt-4 text-xs text-theme-muted sm:flex-row">
             <p>Signature Salon &amp; Nail Spa · Tagum City</p>
-            <p>Multi-Tenant Branch Governance &amp; POS · PHP (₱) · Asia/Manila</p>
+            <p>PHP (₱) · PHT</p>
         </footer>
     </div>
 </x-layouts.base>

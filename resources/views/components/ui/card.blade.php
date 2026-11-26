@@ -6,17 +6,17 @@
 
 <div {{ $attributes->merge(['class' => 'sig-card rounded-2xl']) }}>
     @if ($title || isset($actions))
-        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-theme px-5 py-4 sm:px-6">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-theme px-5 py-3.5 sm:px-6">
             <div>
                 @if ($title)
-                    <h3 class="font-display text-xl font-semibold text-theme-primary">{{ $title }}</h3>
+                    <h3 class="font-display text-base font-semibold text-theme-primary">{{ $title }}</h3>
                 @endif
                 @if ($subtitle)
-                    <p class="mt-0.5 text-xs text-theme-secondary">{{ $subtitle }}</p>
+                    <p class="mt-0.5 text-xs text-theme-muted">{{ $subtitle }}</p>
                 @endif
             </div>
             @if (isset($actions))
-                <div class="flex items-center gap-2">
+                <div class="flex flex-wrap items-center gap-2">
                     {{ $actions }}
                 </div>
             @endif
