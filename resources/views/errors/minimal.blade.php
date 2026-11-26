@@ -1,9 +1,14 @@
+@php
+    $resolvedCode = $code ?? (trim($__env->yieldContent('code')) ?: '500');
+    $resolvedMessage = $message ?? (trim($__env->yieldContent('message')) ?: 'An unexpected error occurred.');
+    $resolvedTitle = trim($__env->yieldContent('title')) ?: $resolvedCode;
+@endphp
 <!doctype html>
 <html lang="en" class="dark" data-theme="dark">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ $code }} · {{ config('app.name') }}</title>
+    <title>{{ $resolvedTitle }} · {{ config('app.name') }}</title>
     <script>
         (function () {
             try {
@@ -79,8 +84,8 @@
 </head>
 <body>
     <main>
-        <h1>{{ $code }}</h1>
-        <p>{{ $message }}</p>
+        <h1>{{ $resolvedCode }}</h1>
+        <p>{{ $resolvedMessage }}</p>
         <a href="{{ url('/') }}">Return to Signature POS</a>
     </main>
 </body>

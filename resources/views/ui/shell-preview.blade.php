@@ -84,7 +84,7 @@
             />
 
             <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
-                <x-ui.card title="Low-Stock Alert Boxes (9px Radius)" subtitle="Rendered via <x-ui.low-stock-badge />">
+                <x-ui.card title="Low-Stock Alert Boxes (9px Radius)" subtitle="Strict 9px box radius stock status indicators">
                     <div class="space-y-3">
                         @foreach ($demoInventory as $row)
                             <div class="sig-elevated flex flex-wrap items-center justify-between gap-3 rounded-xl px-4 py-3">
