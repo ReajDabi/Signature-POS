@@ -60,6 +60,17 @@ Always read [TEAM_AI_PROMPT.md](docs/TEAM_AI_PROMPT.md), [architecture.md](docs/
 - **Views & Prototype Routes:** `auth/login.blade.php`, `ui/shell-preview.blade.php`, `errors/minimal.blade.php` (supporting both `ErrorResponder` props and Laravel `@section` error views), prototype routes in `routes/web.php`, and `tests/Feature/UiFoundationTest.php`.
 - **Baseline Verification:** `npm run build`, `pint`, and `26 passed (52 assertions)` in PHPUnit.
 
+### UI Step 2 — HQ Super Admin Portal UI (Completed)
+- **Views (`resources/views/hq/`):**
+  - `dashboard.blade.php` (`hq.dashboard`): KPI strip, 3-branch share summary cards, live Chart.js cross-branch daily revenue bar chart (7/14-day toggle) and service category doughnut chart synced with `signature:theme-changed`, 9px-radius low-stock watchlist, and 10 latest cross-branch transactions.
+  - `branches/index.blade.php` (`hq.branches.index`): Branch directory with live search/status filters, inline active/inactive toggle switches, and Add/Edit Branch modal.
+  - `services/index.blade.php` (`hq.services.index`): Master catalog (`Global` vs branch-scoped), category tabs & search, working expandable BOM rows (`service_products`), Add/Edit Service modal, and interactive BOM Recipe configurator modal.
+  - `products/index.blade.php` (`hq.products.index`): Global products directory with search/stock filters, BOM link counts, 9px-radius cross-branch health badges, and Add/Edit Product modal.
+  - `users/index.blade.php` (`hq.users.index`): Account governance table with role (`hq_admin`, `branch_manager`, `branch_cashier`), branch, and search filters plus Add/Edit User modal enforcing `branch_id = null` for HQ admins.
+  - `audit/index.blade.php` (`hq.audit.index`): Immutable audit log viewer with branch, action, search, and date range filters plus JSON `old_value`/`new_value` inspector modal.
+  - `reports/index.blade.php` (`hq.reports.index`): Cross-branch sales comparison, top services, and stacked paid/unpaid technician commission Chart.js charts + tables with Today / Last 7 Days / MTD preset switching.
+- **Routes & Navigation:** Registered `hq.*` routes in `routes/web.php`, updated brand home link in `components/layouts/app.blade.php` and prototype launcher in `auth/login.blade.php`, and added `tests/Feature/HqPortalUiTest.php`.
+
 ---
 
 ## 5. Team Git & Step-by-Step Execution Workflow
@@ -71,7 +82,6 @@ Always read [TEAM_AI_PROMPT.md](docs/TEAM_AI_PROMPT.md), [architecture.md](docs/
 
 ## 6. Roadmap (What We Are Going To Do Next)
 ### Remaining UI Phase (Interactive Blade/Alpine/Chart.js UI with clean demo data; no backend business logic yet)
-- **UI Step 2 (`reaj/frontend-hq-portal`):** HQ Super Admin Portal UI — Executive Dashboard (KPIs + Chart.js cross-branch revenue/category charts + low-stock watchlist), Branches management, Global Services & Product BOM Recipe mapping, Global Products catalog, Users & Roles governance, HQ Audit Trail, and Cross-Branch Reports.
 - **UI Step 3 (`reaj/frontend-manager-portal`):** Branch Manager Portal UI — Branch Dashboard (daily sales, charts, 9px low-stock alerts), Transactions & Voiding modal, Branch Inventory & Stock Ledger (restock/adjust), CSV Imports UI (upload + batch status/errors), Technicians & Commission Payouts, Branch Services & Discounts, Branch Staff, and Branch Audit Log.
 - **UI Step 4 (`reaj/frontend-cashier-pos`):** Branch Cashier POS Terminal UI — High-speed Dark/Light Glam POS Checkout (category tabs, service grid, Alpine cart with per-line technician & qty, discount selector, cash tendered & change calculator, idempotent checkout state, printable receipt modal, and Today's Shift Transactions).
 

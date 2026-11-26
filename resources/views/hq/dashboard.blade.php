@@ -1,254 +1,479 @@
-<x-layouts.app title="Executive Dashboard" subtitle="Real-time overview · All Branches" portal="hq">
-
+<x-layouts.app
+    title="Executive Dashboard"
+    subtitle="Real-time multi-branch performance · Tagum Network (TCC · APK · VSV)"
+    portal="hq"
+>
     @php
-        /* ── Demo KPI data ─────────────────────────────── */
         $kpis = [
-            ['label' => 'Total Revenue', 'value' => '₱ 284,750.00', 'icon' => 'cash',       'hint' => 'All branches · MTD', 'badge' => '+12.4% vs last month', 'tone' => 'emerald'],
-            ['label' => 'Transactions',  'value' => '1,342',         'icon' => 'transactions','hint' => 'Completed · MTD',   'badge' => '+8.1%',               'tone' => 'emerald'],
-            ['label' => 'Active Branches','value' => '3',            'icon' => 'branches',   'hint' => 'TCC · APK · VSV',   'badge' => 'All Online',          'tone' => 'gold'],
-            ['label' => 'Low-Stock Items','value' => '7',            'icon' => 'alert',      'hint' => 'Across all branches','badge' => '2 Out of Stock',      'tone' => 'rose'],
+            [
+                'label' => 'Gross Revenue (MTD)',
+                'value' => '₱ 284,750.00',
+                'icon' => 'cash',
+                'hint' => 'Cash-only · No VAT v1',
+                'badge' => '+12.4% vs Oct',
+                'tone' => 'emerald',
+            ],
+            [
+                'label' => 'Completed Transactions',
+                'value' => '1,342',
+                'icon' => 'transactions',
+                'hint' => '14 voided excluded',
+                'badge' => '+8.1% MoM',
+                'tone' => 'emerald',
+            ],
+            [
+                'label' => 'Active Branches',
+                'value' => '3',
+                'icon' => 'branches',
+                'hint' => 'TCC · APK · VSV online',
+                'badge' => '19 Technicians',
+                'tone' => 'gold',
+            ],
+            [
+                'label' => 'Low-Stock Alerts',
+                'value' => '6',
+                'icon' => 'alert',
+                'hint' => 'At or below threshold',
+                'badge' => '2 Out of Stock',
+                'tone' => 'rose',
+            ],
         ];
 
-        /* ── Chart datasets (JSON for Alpine / Chart.js) ─ */
-        $revenueLabels = json_encode(['Nov 20','Nov 21','Nov 22','Nov 23','Nov 24','Nov 25','Nov 26']);
-        $revenueDatasets = json_encode([
-            ['label' => 'TCC', 'data' => [12800, 15200, 11400, 16900, 14300, 17100, 13500]],
-            ['label' => 'APK', 'data' => [9100,  10400, 8700,  12100, 11200, 13000, 10800]],
-            ['label' => 'VSV', 'data' => [7300,  8500,  7100,  9800,  8900,  10200, 8600 ]],
-        ]);
-        $catLabels   = json_encode(['Hair', 'Nail', 'Facial', 'Lash & Brow', 'Waxing']);
-        $catRevenue  = json_encode([98400, 72300, 54200, 38100, 21750]);
-
-        /* ── Low-stock watchlist ─────────────────────────── */
-        $lowStock = [
-            ['branch' => 'TCC', 'product' => 'Bleaching Powder 500g', 'qty' => 1,  'threshold' => 5,  'status' => 'low'],
-            ['branch' => 'APK', 'product' => 'Nail Polish Remover 1L', 'qty' => 0,  'threshold' => 3,  'status' => 'out'],
-            ['branch' => 'TCC', 'product' => 'Hair Toner 200ml',       'qty' => 2,  'threshold' => 5,  'status' => 'low'],
-            ['branch' => 'VSV', 'product' => 'Gel Base Coat 50ml',     'qty' => 0,  'threshold' => 4,  'status' => 'out'],
-            ['branch' => 'APK', 'product' => 'Keratin Treatment 300ml','qty' => 3,  'threshold' => 6,  'status' => 'low'],
-            ['branch' => 'VSV', 'product' => 'Facial Serum 30ml',      'qty' => 2,  'threshold' => 5,  'status' => 'low'],
-            ['branch' => 'TCC', 'product' => 'Wax Strip Roll 100pcs',  'qty' => 4,  'threshold' => 10, 'status' => 'low'],
+        $branchSnapshots = [
+            ['code' => 'TCC', 'name' => 'Tagum City Center', 'revenue' => '₱ 121,450.00', 'tx' => 568, 'share' => '42.6%', 'alerts' => 2],
+            ['code' => 'APK', 'name' => 'Apokon', 'revenue' => '₱ 91,800.00', 'tx' => 441, 'share' => '32.2%', 'alerts' => 2],
+            ['code' => 'VSV', 'name' => 'Visayan Village', 'revenue' => '₱ 71,500.00', 'tx' => 333, 'share' => '25.2%', 'alerts' => 2],
         ];
 
-        /* ── Recent transactions ─────────────────────────── */
-        $recentTx = [
-            ['ref' => 'TX-2026-004812', 'branch' => 'TCC', 'services' => 'Full Hair Color, Blow Dry',       'amount' => '₱ 2,850.00', 'cashier' => 'Maria L.',  'status' => 'completed', 'time' => '11:42 AM'],
-            ['ref' => 'TX-2026-004811', 'branch' => 'APK', 'services' => 'Gel Manicure, Pedicure',          'amount' => '₱ 1,200.00', 'cashier' => 'Rosa T.',   'status' => 'completed', 'time' => '11:30 AM'],
-            ['ref' => 'TX-2026-004810', 'branch' => 'VSV', 'services' => 'Facial Treatment',                'amount' => '₱ 1,800.00', 'cashier' => 'Liza M.',   'status' => 'completed', 'time' => '11:15 AM'],
-            ['ref' => 'TX-2026-004809', 'branch' => 'TCC', 'services' => 'Hair Rebond',                     'amount' => '₱ 3,500.00', 'cashier' => 'Maria L.',  'status' => 'completed', 'time' => '10:58 AM'],
-            ['ref' => 'TX-2026-004808', 'branch' => 'APK', 'services' => 'Lash Lift, Brow Lamination',      'amount' => '₱ 2,100.00', 'cashier' => 'Rosa T.',   'status' => 'voided',    'time' => '10:40 AM'],
-            ['ref' => 'TX-2026-004807', 'branch' => 'TCC', 'services' => 'Cut & Style',                     'amount' => '₱  650.00',  'cashier' => 'Maria L.',  'status' => 'completed', 'time' => '10:22 AM'],
-            ['ref' => 'TX-2026-004806', 'branch' => 'VSV', 'services' => 'Underarm Waxing',                 'amount' => '₱  400.00',  'cashier' => 'Liza M.',   'status' => 'completed', 'time' => '10:05 AM'],
-            ['ref' => 'TX-2026-004805', 'branch' => 'APK', 'services' => 'Nail Art (Full Set)',             'amount' => '₱  950.00',  'cashier' => 'Rosa T.',   'status' => 'completed', 'time' => '09:48 AM'],
-            ['ref' => 'TX-2026-004804', 'branch' => 'TCC', 'services' => 'Keratin Treatment',              'amount' => '₱ 4,200.00', 'cashier' => 'Maria L.',  'status' => 'completed', 'time' => '09:30 AM'],
-            ['ref' => 'TX-2026-004803', 'branch' => 'VSV', 'services' => 'Facial + Dermaplaning',          'amount' => '₱ 2,400.00', 'cashier' => 'Liza M.',   'status' => 'completed', 'time' => '09:12 AM'],
+        $lowStockWatchlist = [
+            ['branch' => 'APK', 'product' => 'Nail Polish Remover', 'unit' => 'bottle', 'qty' => '0.00', 'threshold' => '3.00', 'status' => 'out'],
+            ['branch' => 'VSV', 'product' => 'Gel Polish', 'unit' => 'bottle', 'qty' => '0.00', 'threshold' => '8.00', 'status' => 'out'],
+            ['branch' => 'TCC', 'product' => 'Rebond Cream', 'unit' => 'jar', 'qty' => '2.00', 'threshold' => '2.00', 'status' => 'low'],
+            ['branch' => 'TCC', 'product' => 'Hair Color Tube', 'unit' => 'tube', 'qty' => '7.00', 'threshold' => '10.00', 'status' => 'low'],
+            ['branch' => 'APK', 'product' => 'Cuticle Oil', 'unit' => 'bottle', 'qty' => '3.00', 'threshold' => '4.00', 'status' => 'low'],
+            ['branch' => 'VSV', 'product' => 'Hair Serum 100ml', 'unit' => 'bottle', 'qty' => '4.00', 'threshold' => '5.00', 'status' => 'low'],
+        ];
+
+        $recentTransactions = [
+            ['ref' => 'TX-TCC-261126-041', 'branch' => 'TCC', 'services' => 'Rebond, Hair Serum Care', 'technician' => 'Maria Santos', 'amount' => '₱ 2,850.00', 'status' => 'completed', 'time' => '11:42 AM'],
+            ['ref' => 'TX-APK-261126-028', 'branch' => 'APK', 'services' => 'Gel Polish, Pedicure', 'technician' => 'Ana Dela Cruz', 'amount' => '₱ 750.00', 'status' => 'completed', 'time' => '11:30 AM'],
+            ['ref' => 'TX-VSV-261126-019', 'branch' => 'VSV', 'services' => 'Hair Color (Full)', 'technician' => 'Jun Reyes', 'amount' => '₱ 1,800.00', 'status' => 'completed', 'time' => '11:15 AM'],
+            ['ref' => 'TX-TCC-261126-040', 'branch' => 'TCC', 'services' => 'Rebond (Senior 20% Off)', 'technician' => 'Maria Santos', 'amount' => '₱ 2,000.00', 'status' => 'completed', 'time' => '10:58 AM'],
+            ['ref' => 'TX-APK-261126-027', 'branch' => 'APK', 'services' => 'Foot Spa, Manicure', 'technician' => 'Liza Mendoza', 'amount' => '₱ 750.00', 'status' => 'voided', 'time' => '10:40 AM'],
+            ['ref' => 'TX-TCC-261126-039', 'branch' => 'TCC', 'services' => 'Haircut (Women)', 'technician' => 'Ana Dela Cruz', 'amount' => '₱ 350.00', 'status' => 'completed', 'time' => '10:22 AM'],
+            ['ref' => 'TX-VSV-261126-018', 'branch' => 'VSV', 'services' => 'Gel Polish', 'technician' => 'Liza Mendoza', 'amount' => '₱ 450.00', 'status' => 'completed', 'time' => '10:05 AM'],
+            ['ref' => 'TX-APK-261126-026', 'branch' => 'APK', 'services' => 'Hair Color (Full), Haircut (Women)', 'technician' => 'Jun Reyes', 'amount' => '₱ 2,150.00', 'status' => 'completed', 'time' => '09:48 AM'],
+            ['ref' => 'TX-TCC-261126-038', 'branch' => 'TCC', 'services' => 'Foot Spa', 'technician' => 'Liza Mendoza', 'amount' => '₱ 500.00', 'status' => 'completed', 'time' => '09:30 AM'],
+            ['ref' => 'TX-VSV-261126-017', 'branch' => 'VSV', 'services' => 'Haircut (Men)', 'technician' => 'Jun Reyes', 'amount' => '₱ 200.00', 'status' => 'completed', 'time' => '09:12 AM'],
+        ];
+
+        $categorySplits = [
+            ['name' => 'Hair Services', 'revenue' => 176400, 'formatted' => '₱ 176,400.00', 'pct' => '61.9%'],
+            ['name' => 'Nail & Foot Spa', 'revenue' => 108350, 'formatted' => '₱ 108,350.00', 'pct' => '38.1%'],
+        ];
+
+        $chartConfig = [
+            'days7' => [
+                'labels' => ['Nov 20', 'Nov 21', 'Nov 22', 'Nov 23', 'Nov 24', 'Nov 25', 'Nov 26'],
+                'tcc' => [12800, 15200, 11400, 16900, 14300, 17100, 13500],
+                'apk' => [9100, 10400, 8700, 12100, 11200, 13000, 10800],
+                'vsv' => [7300, 8500, 7100, 9800, 8900, 10200, 8600],
+            ],
+            'days14' => [
+                'labels' => ['Nov 13', 'Nov 15', 'Nov 17', 'Nov 19', 'Nov 21', 'Nov 23', 'Nov 26'],
+                'tcc' => [11900, 13400, 14100, 12600, 15200, 16900, 13500],
+                'apk' => [8400, 9600, 10100, 9300, 10400, 12100, 10800],
+                'vsv' => [6800, 7900, 8200, 7400, 8500, 9800, 8600],
+            ],
+            'categories' => [
+                'labels' => ['Hair Color (Full)', 'Rebond', 'Haircut (W/M)', 'Gel Polish & Nail', 'Foot Spa'],
+                'values' => [84600, 62500, 29300, 64850, 43500],
+            ],
         ];
     @endphp
 
-    {{-- KPI Row --------------------------------------------------------- --}}
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        @foreach ($kpis as $kpi)
-            <x-ui.stat-card
-                :label="$kpi['label']"
-                :value="$kpi['value']"
-                :icon="$kpi['icon']"
-                :hint="$kpi['hint']"
-                :badge="$kpi['badge']"
-                :badgeTone="$kpi['tone']"
+    <div class="space-y-8">
+        {{-- Section 1: KPI Cards --}}
+        <section class="space-y-4">
+            <x-ui.section-heading
+                eyebrow="Executive Pulse · HQ Global Scope"
+                title="Network Financial & Branch Snapshot"
+                description="Consolidated figures across all active Tagum City branches (Asia/Manila)."
+            >
+                <x-slot:actions>
+                    <a href="{{ route('hq.reports.index') }}" class="sig-btn-ghost inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-medium">
+                        <x-ui.icon name="reports" class="h-4 w-4 text-gold-accent" />
+                        <span>Cross-Branch Reports</span>
+                    </a>
+                    <a href="{{ route('hq.branches.index') }}" class="sig-btn-gold inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs">
+                        <x-ui.icon name="branches" class="h-4 w-4" />
+                        <span>Manage Branches</span>
+                    </a>
+                </x-slot:actions>
+            </x-ui.section-heading>
+
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                @foreach ($kpis as $kpi)
+                    <x-ui.stat-card
+                        :label="$kpi['label']"
+                        :value="$kpi['value']"
+                        :icon="$kpi['icon']"
+                        :hint="$kpi['hint']"
+                        :badge="$kpi['badge']"
+                        :badgeTone="$kpi['tone']"
+                    />
+                @endforeach
+            </div>
+
+            {{-- Branch Share Strip --}}
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+                @foreach ($branchSnapshots as $branch)
+                    <div class="sig-card rounded-2xl px-5 py-4 flex items-center justify-between gap-4">
+                        <div class="min-w-0 space-y-1">
+                            <div class="flex items-center gap-2">
+                                <span class="rounded-md bg-gold-soft px-2 py-0.5 font-mono text-[11px] font-semibold text-gold-accent">
+                                    {{ $branch['code'] }}
+                                </span>
+                                <span class="truncate text-sm font-medium text-theme-primary">{{ $branch['name'] }}</span>
+                            </div>
+                            <p class="font-display text-2xl font-semibold tabular-nums text-theme-primary">
+                                {{ $branch['revenue'] }}
+                            </p>
+                            <p class="text-xs text-theme-muted tabular-nums">
+                                {{ $branch['tx'] }} txns · {{ $branch['share'] }} network share
+                            </p>
+                        </div>
+                        <x-ui.low-stock-badge status="low" :label="$branch['alerts'].' alerts'" />
+                    </div>
+                @endforeach
+            </div>
+        </section>
+
+        {{-- Section 2: Analytics Charts --}}
+        <section class="space-y-4">
+            <x-ui.section-heading
+                eyebrow="Revenue Analytics"
+                title="Branch Comparison & Service Mix"
+                description="Interactive Chart.js visualizations synchronized automatically with Dark Glam and Light Mode."
             />
-        @endforeach
+
+            <div class="grid grid-cols-1 gap-6 xl:grid-cols-5">
+                {{-- Cross-branch daily revenue bar chart --}}
+                <x-ui.card
+                    title="Daily Revenue Comparison"
+                    subtitle="Peso gross sales by branch"
+                    class="xl:col-span-3"
+                    x-data="hqBranchRevenueChart(@js($chartConfig))"
+                >
+                    <x-slot:actions>
+                        <div class="inline-flex rounded-xl border border-theme bg-theme-elevated p-0.5 text-xs">
+                            <button
+                                type="button"
+                                x-on:click="setRange('days7')"
+                                :class="range === 'days7' ? 'bg-gold-soft text-gold-accent border border-theme-strong' : 'text-theme-secondary border border-transparent'"
+                                class="rounded-lg px-2.5 py-1 font-medium cursor-pointer transition"
+                            >
+                                7 Days
+                            </button>
+                            <button
+                                type="button"
+                                x-on:click="setRange('days14')"
+                                :class="range === 'days14' ? 'bg-gold-soft text-gold-accent border border-theme-strong' : 'text-theme-secondary border border-transparent'"
+                                class="rounded-lg px-2.5 py-1 font-medium cursor-pointer transition"
+                            >
+                                14 Days
+                            </button>
+                        </div>
+                    </x-slot:actions>
+
+                    <div class="relative h-72 w-full">
+                        <canvas x-ref="canvas" aria-label="Cross-branch daily revenue chart"></canvas>
+                    </div>
+                </x-ui.card>
+
+                {{-- Service Mix Doughnut Chart --}}
+                <x-ui.card title="Service Revenue Split" subtitle="Top master catalog groups" class="xl:col-span-2">
+                    <div x-data="hqCategoryChart(@js($chartConfig['categories']))" class="space-y-5">
+                        <div class="relative mx-auto h-52 w-52">
+                            <canvas x-ref="canvas" aria-label="Revenue by service category"></canvas>
+                        </div>
+
+                        <div class="space-y-2 border-t border-theme pt-4">
+                            @foreach ($categorySplits as $split)
+                                <div class="flex items-center justify-between text-xs">
+                                    <span class="text-theme-secondary">{{ $split['name'] }}</span>
+                                    <div class="flex items-center gap-3 tabular-nums">
+                                        <span class="text-theme-muted">{{ $split['pct'] }}</span>
+                                        <span class="font-semibold text-theme-primary">{{ $split['formatted'] }}</span>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </x-ui.card>
+            </div>
+        </section>
+
+        {{-- Section 3: Watchlist & Recent Ledger --}}
+        <section class="space-y-4">
+            <x-ui.section-heading
+                eyebrow="Operational Governance"
+                title="Stock Watchlist & Live Network Transactions"
+                description="Branch inventory alerts use strict 9px boxes; completed and voided checkouts appear network-wide."
+            />
+
+            <div class="grid grid-cols-1 gap-6 xl:grid-cols-12">
+                {{-- Low-Stock Watchlist --}}
+                <x-ui.card title="Low-Stock Watchlist" subtitle="Products at or below threshold" class="xl:col-span-5">
+                    <x-slot:actions>
+                        <a href="{{ route('hq.products.index') }}" class="text-xs font-medium text-gold-accent hover:underline">
+                            Master Products →
+                        </a>
+                    </x-slot:actions>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="border-b border-theme">
+                                    <th class="pb-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Branch</th>
+                                    <th class="pb-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Product</th>
+                                    <th class="pb-3 text-right text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">On Hand</th>
+                                    <th class="pb-3 text-right text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-theme">
+                                @foreach ($lowStockWatchlist as $item)
+                                    <tr class="hover:bg-theme-elevated/45 transition">
+                                        <td class="py-3 pr-3">
+                                            <span class="rounded-md bg-gold-soft px-2 py-0.5 font-mono text-xs font-semibold text-gold-accent">
+                                                {{ $item['branch'] }}
+                                            </span>
+                                        </td>
+                                        <td class="py-3 pr-3">
+                                            <p class="font-medium text-theme-primary">{{ $item['product'] }}</p>
+                                            <p class="text-[11px] text-theme-muted tabular-nums">Min: {{ $item['threshold'] }} {{ $item['unit'] }}</p>
+                                        </td>
+                                        <td class="py-3 pr-3 text-right tabular-nums text-theme-secondary">
+                                            {{ $item['qty'] }}
+                                        </td>
+                                        <td class="py-3 text-right">
+                                            <x-ui.low-stock-badge :status="$item['status']" />
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </x-ui.card>
+
+                {{-- Recent Transactions --}}
+                <x-ui.card title="Recent Transactions" subtitle="Latest 10 across TCC, APK & VSV" class="xl:col-span-7">
+                    <x-slot:actions>
+                        <a href="{{ route('hq.audit.index') }}" class="text-xs font-medium text-gold-accent hover:underline">
+                            Audit Trail →
+                        </a>
+                    </x-slot:actions>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="border-b border-theme">
+                                    <th class="pb-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Reference</th>
+                                    <th class="pb-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Branch</th>
+                                    <th class="pb-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Services &amp; Tech</th>
+                                    <th class="pb-3 text-right text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Total</th>
+                                    <th class="pb-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted pl-4">Status</th>
+                                    <th class="pb-3 text-right text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Time</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-theme">
+                                @foreach ($recentTransactions as $tx)
+                                    <tr class="hover:bg-theme-elevated/45 transition">
+                                        <td class="py-3 pr-3 font-mono text-xs text-theme-muted whitespace-nowrap">{{ $tx['ref'] }}</td>
+                                        <td class="py-3 pr-3">
+                                            <span class="rounded-md bg-gold-soft px-2 py-0.5 font-mono text-xs font-semibold text-gold-accent">
+                                                {{ $tx['branch'] }}
+                                            </span>
+                                        </td>
+                                        <td class="py-3 pr-3">
+                                            <p class="max-w-[200px] truncate font-medium text-theme-primary">{{ $tx['services'] }}</p>
+                                            <p class="text-[11px] text-theme-muted">{{ $tx['technician'] }}</p>
+                                        </td>
+                                        <td class="py-3 pr-3 text-right font-semibold tabular-nums text-theme-primary whitespace-nowrap">
+                                            {{ $tx['amount'] }}
+                                        </td>
+                                        <td class="py-3 pl-4">
+                                            <x-ui.status-badge :status="$tx['status']" />
+                                        </td>
+                                        <td class="py-3 text-right tabular-nums text-xs text-theme-muted whitespace-nowrap">
+                                            {{ $tx['time'] }}
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </x-ui.card>
+            </div>
+        </section>
     </div>
 
-    {{-- Charts Row ------------------------------------------------------ --}}
-    <div class="mt-6 grid grid-cols-1 gap-6 xl:grid-cols-5">
+    @pushOnce('scripts')
+        <script>
+            window.hqBranchRevenueChart = function (config) {
+                let chart = null;
+                let themeListener = null;
 
-        {{-- Cross-branch revenue bar (3/5 width) --}}
-        <x-ui.card title="Daily Revenue · Last 7 Days" subtitle="₱ per branch" class="xl:col-span-3">
-            <x-slot:actions>
-                <span class="text-xs text-theme-muted tabular-nums">Nov 20–26, 2026</span>
-            </x-slot:actions>
-            <div
-                x-data="branchRevenueChart()"
-                x-init="init()"
-                class="relative h-72"
-            >
-                <canvas x-ref="canvas" class="w-full h-full"></canvas>
-            </div>
-        </x-ui.card>
+                return {
+                    range: 'days7',
+                    init() {
+                        const renderChart = () => {
+                            if (!this.$refs.canvas || typeof window.Chart === 'undefined') {
+                                return;
+                            }
 
-        {{-- Service category doughnut (2/5 width) --}}
-        <x-ui.card title="Revenue by Category" subtitle="Month-to-date split" class="xl:col-span-2">
-            <div
-                x-data="categoryChart()"
-                x-init="init()"
-                class="relative flex flex-col items-center gap-4"
-            >
-                <div class="relative h-56 w-56">
-                    <canvas x-ref="canvas" class="w-full h-full"></canvas>
-                </div>
-                {{-- Legend --}}
-                <ul class="w-full space-y-1 text-xs">
-                    @php $catPairs = [['Hair','₱ 98,400'],['Nail','₱ 72,300'],['Facial','₱ 54,200'],['Lash & Brow','₱ 38,100'],['Waxing','₱ 21,750']]; @endphp
-                    @foreach ($catPairs as [$cat, $rev])
-                        <li class="flex items-center justify-between gap-2">
-                            <span class="text-theme-secondary">{{ $cat }}</span>
-                            <span class="tabular-nums font-medium text-theme-primary">{{ $rev }}</span>
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
-        </x-ui.card>
-    </div>
+                            const p = window.signatureThemePalette ? window.signatureThemePalette() : {};
+                            const set = config[this.range];
 
-    {{-- Low-stock Watchlist -------------------------------------------- --}}
-    <div class="mt-6">
-        <x-ui.card title="Low-Stock Watchlist" subtitle="Products below reorder threshold">
-            <x-slot:actions>
-                <a href="{{ route('hq.products.index') }}" class="text-xs font-medium text-gold-accent hover:underline">
-                    View All Products →
-                </a>
-            </x-slot:actions>
-            <div class="overflow-x-auto">
-                <table class="w-full text-sm">
-                    <thead>
-                        <tr class="border-b border-theme">
-                            <th class="pb-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Branch</th>
-                            <th class="pb-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Product</th>
-                            <th class="pb-3 text-right text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Qty</th>
-                            <th class="pb-3 text-right text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Threshold</th>
-                            <th class="pb-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted pl-4">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-theme">
-                        @foreach ($lowStock as $row)
-                            <tr class="hover:bg-theme-elevated/50 transition">
-                                <td class="py-3 pr-4">
-                                    <span class="rounded-md bg-gold-soft px-2 py-0.5 text-xs font-semibold text-gold-accent">
-                                        {{ $row['branch'] }}
-                                    </span>
-                                </td>
-                                <td class="py-3 pr-4 text-theme-primary font-medium">{{ $row['product'] }}</td>
-                                <td class="py-3 pr-4 text-right tabular-nums text-theme-secondary">{{ $row['qty'] }}</td>
-                                <td class="py-3 pr-4 text-right tabular-nums text-theme-muted">{{ $row['threshold'] }}</td>
-                                <td class="py-3 pl-4">
-                                    <x-ui.low-stock-badge :status="$row['status']" />
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </x-ui.card>
-    </div>
+                            if (chart) {
+                                chart.destroy();
+                            }
 
-    {{-- Recent Transactions --------------------------------------------- --}}
-    <div class="mt-6">
-        <x-ui.card title="Recent Transactions" subtitle="Latest 10 across all branches">
-            <x-slot:actions>
-                <a href="{{ route('hq.reports.index') }}" class="text-xs font-medium text-gold-accent hover:underline">
-                    Full Reports →
-                </a>
-            </x-slot:actions>
-            <div class="overflow-x-auto">
-                <table class="w-full text-sm">
-                    <thead>
-                        <tr class="border-b border-theme">
-                            <th class="pb-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Ref #</th>
-                            <th class="pb-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Branch</th>
-                            <th class="pb-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Services</th>
-                            <th class="pb-3 text-right text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Amount</th>
-                            <th class="pb-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted pl-4">Status</th>
-                            <th class="pb-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted pl-4">Cashier</th>
-                            <th class="pb-3 text-right text-xs font-semibold uppercase tracking-[0.12em] text-theme-muted">Time</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-theme">
-                        @foreach ($recentTx as $tx)
-                            <tr class="hover:bg-theme-elevated/50 transition">
-                                <td class="py-3 pr-4 font-mono text-xs text-theme-muted">{{ $tx['ref'] }}</td>
-                                <td class="py-3 pr-4">
-                                    <span class="rounded-md bg-gold-soft px-2 py-0.5 text-xs font-semibold text-gold-accent">
-                                        {{ $tx['branch'] }}
-                                    </span>
-                                </td>
-                                <td class="py-3 pr-4 text-theme-secondary max-w-[220px] truncate">{{ $tx['services'] }}</td>
-                                <td class="py-3 pr-4 text-right tabular-nums font-medium text-theme-primary">{{ $tx['amount'] }}</td>
-                                <td class="py-3 pl-4">
-                                    <x-ui.status-badge :status="$tx['status']" />
-                                </td>
-                                <td class="py-3 pl-4 text-theme-secondary">{{ $tx['cashier'] }}</td>
-                                <td class="py-3 text-right tabular-nums text-xs text-theme-muted">{{ $tx['time'] }}</td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </x-ui.card>
-    </div>
+                            chart = new window.Chart(this.$refs.canvas, {
+                                type: 'bar',
+                                data: {
+                                    labels: set.labels,
+                                    datasets: [
+                                        { label: 'TCC · Center', data: set.tcc, backgroundColor: p.gold, borderRadius: 6, borderSkipped: false },
+                                        { label: 'APK · Apokon', data: set.apk, backgroundColor: p.champagne, borderRadius: 6, borderSkipped: false },
+                                        { label: 'VSV · Visayan', data: set.vsv, backgroundColor: p.emerald, borderRadius: 6, borderSkipped: false },
+                                    ],
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    plugins: {
+                                        legend: {
+                                            labels: {
+                                                color: p.legend,
+                                                boxWidth: 10,
+                                                usePointStyle: true,
+                                                pointStyle: 'circle',
+                                                font: { family: 'Inter', size: 11 },
+                                            },
+                                        },
+                                        tooltip: {
+                                            callbacks: {
+                                                label: (ctx) => ` ${ctx.dataset.label}: ₱ ${Number(ctx.parsed.y).toLocaleString('en-PH', { minimumFractionDigits: 2 })}`,
+                                            },
+                                        },
+                                    },
+                                    scales: {
+                                        x: {
+                                            ticks: { color: p.tick, font: { family: 'Inter', size: 11 } },
+                                            grid: { display: false },
+                                        },
+                                        y: {
+                                            ticks: {
+                                                color: p.tick,
+                                                font: { family: 'Inter', size: 11 },
+                                                callback: (v) => `₱${(v / 1000).toFixed(0)}k`,
+                                            },
+                                            grid: { color: p.grid },
+                                        },
+                                    },
+                                },
+                            });
+                        };
 
-    {{-- Alpine / Chart.js component scripts ----------------------------- --}}
-    @push('scripts')
-    <script>
-    function branchRevenueChart() {
-        return {
-            init() {
-                const palette = window.signatureThemePalette ? window.signatureThemePalette() : {};
-                const gold    = palette.gold    ?? '#c9a84c';
-                const accent1 = palette.accent1 ?? '#7c6f3e';
-                const muted   = palette.muted   ?? '#94a3b8';
-
-                new Chart(this.$refs.canvas, {
-                    type: 'bar',
-                    data: {
-                        labels: {!! $revenueLabels !!},
-                        datasets: {!! $revenueDatasets !!}.map((ds, i) => ({
-                            ...ds,
-                            backgroundColor: [gold, accent1, muted][i] + (i === 0 ? '' : '99'),
-                            borderRadius: 6,
-                            borderSkipped: false,
-                        })),
+                        renderChart();
+                        themeListener = () => renderChart();
+                        window.addEventListener('signature:theme-changed', themeListener);
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { labels: { color: palette.text ?? '#94a3b8', font: { family: 'Inter', size: 11 } } },
-                            tooltip: { callbacks: { label: (ctx) => ' ₱ ' + ctx.parsed.y.toLocaleString('en-PH') } },
-                        },
-                        scales: {
-                            x: { ticks: { color: palette.text ?? '#94a3b8', font: { size: 11 } }, grid: { color: palette.grid ?? 'rgba(255,255,255,0.06)' } },
-                            y: { ticks: { color: palette.text ?? '#94a3b8', font: { size: 11 }, callback: (v) => '₱' + (v/1000).toFixed(0) + 'k' }, grid: { color: palette.grid ?? 'rgba(255,255,255,0.06)' } },
-                        },
+                    setRange(nextRange) {
+                        this.range = nextRange;
+                        const p = window.signatureThemePalette ? window.signatureThemePalette() : {};
+                        const set = config[this.range];
+                        if (chart && set) {
+                            chart.data.labels = set.labels;
+                            chart.data.datasets[0].data = set.tcc;
+                            chart.data.datasets[1].data = set.apk;
+                            chart.data.datasets[2].data = set.vsv;
+                            chart.update();
+                        }
                     },
-                });
-            },
-        };
-    }
+                    destroy() {
+                        if (themeListener) {
+                            window.removeEventListener('signature:theme-changed', themeListener);
+                        }
+                        if (chart) {
+                            chart.destroy();
+                        }
+                    },
+                };
+            };
 
-    function categoryChart() {
-        return {
-            init() {
-                const palette = window.signatureThemePalette ? window.signatureThemePalette() : {};
-                new Chart(this.$refs.canvas, {
-                    type: 'doughnut',
-                    data: {
-                        labels: {!! $catLabels !!},
-                        datasets: [{ data: {!! $catRevenue !!}, backgroundColor: ['#c9a84c','#7c6f3e','#a89560','#d4b96e','#5a5030'], hoverOffset: 8, borderWidth: 2, borderColor: 'transparent' }],
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        cutout: '68%',
-                        plugins: {
-                            legend: { display: false },
-                            tooltip: { callbacks: { label: (ctx) => ' ₱ ' + ctx.parsed.toLocaleString('en-PH') } },
-                        },
-                    },
-                });
-            },
-        };
-    }
-    </script>
-    @endpush
+            window.hqCategoryChart = function (categoryData) {
+                let chart = null;
+                let themeListener = null;
 
+                return {
+                    init() {
+                        const renderChart = () => {
+                            if (!this.$refs.canvas || typeof window.Chart === 'undefined') {
+                                return;
+                            }
+
+                            const p = window.signatureThemePalette ? window.signatureThemePalette() : {};
+
+                            if (chart) {
+                                chart.destroy();
+                            }
+
+                            chart = new window.Chart(this.$refs.canvas, {
+                                type: 'doughnut',
+                                data: {
+                                    labels: categoryData.labels,
+                                    datasets: [
+                                        {
+                                            data: categoryData.values,
+                                            backgroundColor: [p.gold, p.champagne, p.emerald, '#9d7636', '#7b756b'],
+                                            borderColor: p.surface,
+                                            borderWidth: 3,
+                                            hoverOffset: 6,
+                                        },
+                                    ],
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    cutout: '66%',
+                                    plugins: {
+                                        legend: { display: false },
+                                        tooltip: {
+                                            callbacks: {
+                                                label: (ctx) => ` ${ctx.label}: ₱ ${Number(ctx.parsed).toLocaleString('en-PH', { minimumFractionDigits: 2 })}`,
+                                            },
+                                        },
+                                    },
+                                },
+                            });
+                        };
+
+                        renderChart();
+                        themeListener = () => renderChart();
+                        window.addEventListener('signature:theme-changed', themeListener);
+                    },
+                    destroy() {
+                        if (themeListener) {
+                            window.removeEventListener('signature:theme-changed', themeListener);
+                        }
+                        if (chart) {
+                            chart.destroy();
+                        }
+                    },
+                };
+            };
+        </script>
+    @endPushOnce
 </x-layouts.app>

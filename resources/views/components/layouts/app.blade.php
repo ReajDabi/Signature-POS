@@ -125,7 +125,12 @@
         >
             {{-- Brand header --}}
             <div class="flex items-center justify-between gap-3 border-b border-theme px-5 py-5">
-                <a href="{{ Route::has('ui.foundation') ? route('ui.foundation', ['portal' => $portal]) : url('/') }}" class="flex items-center gap-3 min-w-0">
+                @php
+                    $homeUrl = Route::has($portal.'.dashboard')
+                        ? route($portal.'.dashboard')
+                        : (Route::has('ui.foundation') ? route('ui.foundation', ['portal' => $portal]) : url('/'));
+                @endphp
+                <a href="{{ $homeUrl }}" class="flex items-center gap-3 min-w-0">
                     <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-theme-strong bg-gold-soft font-display text-2xl font-semibold text-gold-accent">
                         S
                     </span>

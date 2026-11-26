@@ -100,8 +100,17 @@
                     <p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-gold-accent">
                         UI Prototype Previews
                     </p>
-                    <span class="text-[11px] text-theme-muted">Step 1 Shell</span>
+                    <span class="text-[11px] text-theme-muted">Step 2 · HQ Ready</span>
                 </div>
+
+                @if (Route::has('hq.dashboard'))
+                    <a
+                        href="{{ route('hq.dashboard') }}"
+                        class="sig-btn-gold flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-xs font-semibold"
+                    >
+                        <span>Open HQ Super Admin Portal</span>
+                    </a>
+                @endif
 
                 <div class="grid grid-cols-3 gap-2 text-center text-xs">
                     <a
