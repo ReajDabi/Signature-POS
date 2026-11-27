@@ -14,7 +14,7 @@ class BranchPortalUiTest extends TestCase
     #[TestWith(['manager.inventory.index', '/manager/inventory', 'Branch Inventory', 'Rebond Cream'])]
     #[TestWith(['manager.imports.index', '/manager/imports', 'CSV Imports', 'tcc-nov-restock.csv'])]
     #[TestWith(['manager.technicians.index', '/manager/technicians', 'Technicians & Commissions', 'Maria Santos'])]
-    #[TestWith(['manager.catalog.index', '/manager/catalog', 'Branch Discounts', 'Senior citizen 20%'])]
+    #[TestWith(['manager.catalog.index', '/manager/catalog', 'Branch Discounts', 'Holiday Glam 15% Off'])]
     #[TestWith(['manager.staff.index', '/manager/staff', 'Branch Staff', 'manager.center@signature.test'])]
     #[TestWith(['manager.audit.index', '/manager/audit', 'Branch Audit Log', 'Read-Only Ledger'])]
     public function test_manager_portal_route_renders_expected_view_and_content(
@@ -45,7 +45,7 @@ class BranchPortalUiTest extends TestCase
             ->assertSee('sig-low-stock-badge');
     }
 
-    #[TestWith(['cashier.pos', '/cashier', 'Current Ticket', 'Complete Cash Sale'])]
+    #[TestWith(['cashier.pos', '/cashier', 'Current Ticket', 'Holiday Glam 15% Off (HQ Promo)'])]
     #[TestWith(['cashier.transactions.index', '/cashier/transactions', 'Shift Transactions', 'TX-TCC-041'])]
     public function test_cashier_portal_route_renders_expected_view_and_content(
         string $routeName,
