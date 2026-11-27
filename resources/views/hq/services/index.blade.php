@@ -115,7 +115,14 @@
             ],
         ];
 
-        $productOptions = ['Hair Serum 100ml', 'Hair Color Tube', 'Cuticle Oil', 'Nail Polish Remover', 'Gel Polish', 'Rebond Cream'];
+        $productOptions = [
+            ['name' => 'Hair Serum 100ml', 'unit' => 'bottle'],
+            ['name' => 'Hair Color Tube', 'unit' => 'tube'],
+            ['name' => 'Cuticle Oil', 'unit' => 'bottle'],
+            ['name' => 'Nail Polish Remover', 'unit' => 'bottle'],
+            ['name' => 'Gel Polish', 'unit' => 'bottle'],
+            ['name' => 'Rebond Cream', 'unit' => 'jar'],
+        ];
     @endphp
 
     <div
@@ -127,7 +134,7 @@
             notice: null,
             editingId: null,
             bomServiceId: null,
-            newBom: { product: 'Hair Color Tube', unit: 'tube', qty_consumed: '1.00' },
+            newBom: { product: 'Hair Color Tube', qty_consumed: '1.00' },
             form: { name: '', category: 'Hair', price: '500.00', duration_min: 45, scope: 'global', branch_code: 'Global', is_active: true },
             get filtered() {
                 const q = this.search.trim().toLowerCase();
@@ -139,6 +146,9 @@
             },
             get currentBomService() {
                 return this.services.find((s) => s.id === this.bomServiceId) || null;
+            },
+            unitForProduct(name) {
+                return this.productOptions.find((p) => p.name === name)?.unit || 'unit';
             },
             formatPeso(val) {
                 return '₱ ' + Number(val || 0).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -162,17 +172,19 @@
                 if (!target || Number(this.newBom.qty_consumed) <= 0) {
                     return;
                 }
+                const unit = this.unitForProduct(this.newBom.product);
                 const existing = target.bom.find((item) => item.product === this.newBom.product);
                 if (existing) {
                     existing.qty_consumed = Number(this.newBom.qty_consumed).toFixed(2);
+                    existing.unit = unit;
                 } else {
                     target.bom.push({
                         product: this.newBom.product,
-                        unit: this.newBom.unit,
+                        unit,
                         qty_consumed: Number(this.newBom.qty_consumed).toFixed(2),
                     });
                 }
-                this.notice = `Updated BOM for ${target.name}.`;
+                this.notice = `Updated recipe for ${target.name}.`;
             },
             removeBomRow(idx) {
                 const target = this.currentBomService;
@@ -231,22 +243,10 @@
             </x-slot:actions>
         </x-ui.section-heading>
 
-        <div
-            x-show="notice"
-            x-cloak
-            class="flex items-center justify-between gap-3 rounded-xl border border-emerald-500/35 bg-emerald-500/10 px-4 py-3 text-xs text-emerald-800 dark:text-emerald-200"
-        >
-            <div class="flex items-center gap-2.5">
-                <x-ui.icon name="check" class="h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
-                <span x-text="notice"></span>
-            </div>
-            <button type="button" x-on:click="notice = null" class="text-theme-muted hover:text-theme-primary cursor-pointer" aria-label="Dismiss">
-                <x-ui.icon name="close" class="h-4 w-4" />
-            </button>
-        </div>
+        <x-ui.notice />
 
-        <x-ui.card title="Service Catalog">
-            <x-slot:actions>
+        <x-ui.card>
+            <div class="mb-5 flex flex-wrap items-center justify-between gap-3">
                 <div class="flex flex-wrap items-center gap-2">
                     <div class="inline-flex rounded-xl border border-theme bg-theme-elevated p-0.5 text-xs">
                         @foreach (['All', 'Hair', 'Nail', 'Branch'] as $tab)
@@ -267,11 +267,12 @@
                             type="search"
                             x-model="search"
                             placeholder="Search services…"
-                            class="sig-input rounded-xl py-1.5 pl-9 pr-3 text-xs w-48"
+                            class="sig-input rounded-xl py-1.5 pl-9 pr-3 text-xs w-52"
                         >
                     </div>
                 </div>
-            </x-slot:actions>
+                <span class="text-xs text-theme-muted tabular-nums" x-text="filtered.length + ' services'"></span>
+            </div>
 
             <div class="overflow-x-auto">
                 <table class="w-full text-sm">
@@ -282,8 +283,7 @@
                             <th class="pb-3 text-left text-xs font-medium text-theme-muted">Category</th>
                             <th class="pb-3 text-right text-xs font-medium text-theme-muted">Price</th>
                             <th class="pb-3 text-left text-xs font-medium text-theme-muted pl-4">Duration</th>
-                            <th class="pb-3 text-left text-xs font-medium text-theme-muted">BOM</th>
-                            <th class="pb-3 text-left text-xs font-medium text-theme-muted">Scope</th>
+                            <th class="pb-3 text-left text-xs font-medium text-theme-muted">Recipe</th>
                             <th class="pb-3 text-left text-xs font-medium text-theme-muted">Status</th>
                             <th class="pb-3 text-right text-xs font-medium text-theme-muted">Actions</th>
                         </tr>
@@ -298,14 +298,25 @@
                                         x-show="svc.bom.length > 0"
                                         x-on:click="expanded = !expanded"
                                         class="rounded p-1 text-theme-muted hover:text-theme-primary cursor-pointer transition"
-                                        :aria-label="'Toggle BOM for ' + svc.name"
+                                        :aria-label="'Toggle ingredients for ' + svc.name"
                                     >
                                         <svg class="h-3.5 w-3.5 transition-transform duration-150" :class="expanded ? 'rotate-90 text-gold-accent' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                                         </svg>
                                     </button>
                                 </td>
-                                <td class="py-3.5 pr-4 font-medium text-theme-primary" x-text="svc.name"></td>
+                                <td class="py-3.5 pr-4">
+                                    <div class="flex flex-wrap items-center gap-2">
+                                        <span class="font-medium text-theme-primary" x-text="svc.name"></span>
+                                        <span
+                                            class="inline-flex items-center rounded-md border px-2 py-0.5 text-[11px] font-medium"
+                                            :class="svc.scope === 'global'
+                                                ? 'border-gold-500/30 bg-gold-soft text-gold-accent'
+                                                : 'border-theme-strong bg-theme-elevated text-theme-muted'"
+                                            x-text="svc.scope === 'global' ? 'Global' : svc.branch_code"
+                                        ></span>
+                                    </div>
+                                </td>
                                 <td class="py-3.5 pr-4">
                                     <span class="rounded-md bg-theme-elevated px-2.5 py-0.5 text-xs text-theme-secondary" x-text="svc.category"></span>
                                 </td>
@@ -320,15 +331,6 @@
                                         <x-ui.icon name="products" class="h-3.5 w-3.5 text-gold-accent" />
                                         <span class="tabular-nums" x-text="svc.bom.length ? svc.bom.length + ' items' : 'Set BOM'"></span>
                                     </button>
-                                </td>
-                                <td class="py-3.5 pr-4">
-                                    <span
-                                        class="inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs font-medium"
-                                        :class="svc.scope === 'global'
-                                            ? 'border-gold-500/30 bg-gold-soft text-gold-accent'
-                                            : 'border-theme-strong bg-theme-elevated text-theme-muted'"
-                                        x-text="svc.scope === 'global' ? 'Global' : svc.branch_code"
-                                    ></span>
                                 </td>
                                 <td class="py-3.5 pr-4">
                                     <span
@@ -364,7 +366,7 @@
 
                             <tr x-show="expanded && svc.bom.length > 0" x-cloak class="bg-theme-elevated/45">
                                 <td></td>
-                                <td colspan="8" class="py-3 pr-4">
+                                <td colspan="7" class="py-3 pr-4">
                                     <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
                                         <p class="text-[11px] font-semibold uppercase tracking-[0.14em] text-gold-accent">
                                             Ingredients per Service
@@ -393,7 +395,7 @@
 
                     <tbody x-show="filtered.length === 0" x-cloak>
                         <tr>
-                            <td colspan="9" class="py-8 text-center text-xs text-theme-muted">
+                            <td colspan="8" class="py-8 text-center text-xs text-theme-muted">
                                 No matching services found.
                             </td>
                         </tr>
@@ -487,13 +489,14 @@
                 </div>
 
                 <form x-on:submit.prevent="addBomRow()" class="border-t border-theme pt-4 space-y-3">
-                    <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                    <div class="grid grid-cols-1 gap-3 sm:grid-cols-4">
                         <select x-model="newBom.product" class="sig-input rounded-xl px-3 py-2 text-xs sm:col-span-2">
-                            <template x-for="opt in productOptions" :key="opt">
-                                <option :value="opt" x-text="opt"></option>
+                            <template x-for="opt in productOptions" :key="opt.name">
+                                <option :value="opt.name" x-text="opt.name + ' (' + opt.unit + ')'"></option>
                             </template>
                         </select>
                         <input type="number" step="0.01" min="0.01" x-model="newBom.qty_consumed" class="sig-input rounded-xl px-3 py-2 text-xs tabular-nums" placeholder="Qty">
+                        <div class="sig-elevated flex items-center justify-center rounded-xl px-3 py-2 text-xs font-mono text-theme-muted" x-text="unitForProduct(newBom.product)"></div>
                     </div>
                     <div class="flex justify-end gap-2 pt-2">
                         <button type="button" x-on:click="$dispatch('close-modal', 'bom-editor')" class="sig-btn-ghost rounded-xl px-4 py-2 text-xs font-medium cursor-pointer">

@@ -1,7 +1,10 @@
 @props([
     'label',
-    'value',
+    'value' => null,
+    'valueBind' => null,
+    'valueTone' => 'default',
     'hint' => null,
+    'hintBind' => null,
     'icon' => 'sparkle',
     'badge' => null,
     'badgeTone' => 'gold',
@@ -14,6 +17,7 @@
         'amber' => 'bg-amber-500/15 text-amber-800 dark:text-amber-300 border-amber-500/30',
         default => 'bg-gold-soft text-gold-accent border-theme-strong',
     };
+    $valueColorClass = $valueTone === 'gold' ? 'text-gold-accent' : 'text-theme-primary';
 @endphp
 
 <div {{ $attributes->merge(['class' => 'sig-card rounded-2xl p-5 flex flex-col justify-between gap-3.5']) }}>
@@ -22,7 +26,10 @@
             <p class="truncate text-xs font-medium text-theme-secondary">
                 {{ $label }}
             </p>
-            <p class="font-display text-2xl sm:text-[1.75rem] font-semibold tracking-tight text-theme-primary tabular-nums leading-none">
+            <p
+                class="font-display text-2xl sm:text-[1.75rem] font-semibold tracking-tight {{ $valueColorClass }} tabular-nums leading-none"
+                @if ($valueBind) x-text="{{ $valueBind }}" @endif
+            >
                 {{ $value }}
             </p>
         </div>
@@ -32,10 +39,10 @@
         </span>
     </div>
 
-    @if ($hint || $badge)
+    @if ($hint || $hintBind || $badge)
         <div class="flex items-center justify-between gap-2 border-t border-theme pt-2.5 text-xs">
-            @if ($hint)
-                <span class="truncate text-theme-muted">{{ $hint }}</span>
+            @if ($hint || $hintBind)
+                <span class="truncate text-theme-muted" @if ($hintBind) x-text="{{ $hintBind }}" @endif>{{ $hint }}</span>
             @else
                 <span></span>
             @endif

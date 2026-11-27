@@ -106,22 +106,22 @@
 
                 <div class="grid grid-cols-3 gap-2 text-center text-xs">
                     <a
-                        href="{{ route('ui.foundation', ['portal' => 'hq']) }}"
+                        href="{{ Route::has('hq.dashboard') ? route('hq.dashboard') : route('ui.foundation', ['portal' => 'hq']) }}"
                         class="sig-btn-ghost rounded-xl px-3 py-2 font-medium"
                     >
-                        HQ Shell
+                        HQ Portal
                     </a>
                     <a
-                        href="{{ route('ui.foundation', ['portal' => 'manager']) }}"
+                        href="{{ Route::has('manager.dashboard') ? route('manager.dashboard') : route('ui.foundation', ['portal' => 'manager']) }}"
                         class="sig-btn-ghost rounded-xl px-3 py-2 font-medium"
                     >
                         Manager
                     </a>
                     <a
-                        href="{{ route('ui.foundation', ['portal' => 'cashier']) }}"
+                        href="{{ Route::has('cashier.pos') ? route('cashier.pos') : route('ui.foundation', ['portal' => 'cashier']) }}"
                         class="sig-btn-ghost rounded-xl px-3 py-2 font-medium"
                     >
-                        Cashier
+                        Cashier POS
                     </a>
                 </div>
             </div>
