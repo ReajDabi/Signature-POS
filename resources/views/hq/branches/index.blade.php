@@ -105,22 +105,10 @@
             </x-slot:actions>
         </x-ui.section-heading>
 
-        <div
-            x-show="notice"
-            x-cloak
-            class="flex items-center justify-between gap-3 rounded-xl border border-emerald-500/35 bg-emerald-500/10 px-4 py-3 text-xs text-emerald-800 dark:text-emerald-200"
-        >
-            <div class="flex items-center gap-2.5">
-                <x-ui.icon name="check" class="h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
-                <span x-text="notice"></span>
-            </div>
-            <button type="button" x-on:click="notice = null" class="text-theme-muted hover:text-theme-primary cursor-pointer" aria-label="Dismiss">
-                <x-ui.icon name="close" class="h-4 w-4" />
-            </button>
-        </div>
+        <x-ui.notice />
 
-        <x-ui.card title="All Branches">
-            <x-slot:actions>
+        <x-ui.card>
+            <div class="mb-5 flex flex-wrap items-center justify-between gap-3">
                 <div class="flex flex-wrap items-center gap-2">
                     <div class="relative">
                         <x-ui.icon name="search" class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-theme-muted" />
@@ -128,7 +116,7 @@
                             type="search"
                             x-model="search"
                             placeholder="Search branches…"
-                            class="sig-input rounded-xl py-2 pl-9 pr-3 text-xs w-52"
+                            class="sig-input rounded-xl py-2 pl-9 pr-3 text-xs w-56"
                         >
                     </div>
                     <select x-model="statusFilter" class="sig-input rounded-xl px-3 py-2 text-xs">
@@ -137,7 +125,8 @@
                         <option value="inactive">Inactive</option>
                     </select>
                 </div>
-            </x-slot:actions>
+                <span class="text-xs text-theme-muted tabular-nums" x-text="filtered.length + ' branches'"></span>
+            </div>
 
             <div class="overflow-x-auto">
                 <table class="w-full text-sm">

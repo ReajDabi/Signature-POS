@@ -148,8 +148,9 @@
                 </button>
             </x-slot:actions>
 
-            <div class="mb-5 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
-                <div class="relative lg:col-span-2">
+            {{-- Row 1: Search (left) + Date (right) --}}
+            <div class="mb-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <div class="relative sm:w-1/2 lg:w-2/5">
                     <x-ui.icon name="search" class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-theme-muted" />
                     <input
                         type="search"
@@ -158,7 +159,13 @@
                         class="sig-input w-full rounded-xl py-2 pl-9 pr-3 text-xs"
                     >
                 </div>
+                <div class="text-xs font-medium text-theme-muted">
+                    {{ now()->format('F j, Y') }}
+                </div>
+            </div>
 
+            {{-- Row 2: Branches, Actions, Date range --}}
+            <div class="mb-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
                 <select x-model="branchFilter" class="sig-input rounded-xl px-3 py-2 text-xs">
                     <option value="all">All Branches</option>
                     <option value="HQ">HQ</option>

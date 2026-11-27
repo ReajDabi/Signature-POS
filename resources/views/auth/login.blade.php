@@ -3,7 +3,7 @@
         <div class="sig-card rounded-3xl p-6 sm:p-8">
             <div class="mb-6 space-y-1.5 text-center">
                 <p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-gold-accent">
-                    Signature Salon &amp; Nail Spa
+                    Signature Salon & Nail Spa
                 </p>
                 <h1 class="font-display text-3xl font-semibold tracking-tight text-theme-primary">
                     Welcome Back
@@ -106,22 +106,22 @@
 
                 <div class="grid grid-cols-3 gap-2 text-center text-xs">
                     <a
-                        href="{{ route('ui.foundation', ['portal' => 'hq']) }}"
+                        href="{{ Route::has('hq.dashboard') ? route('hq.dashboard') : route('ui.foundation', ['portal' => 'hq']) }}"
                         class="sig-btn-ghost rounded-xl px-3 py-2 font-medium"
                     >
-                        HQ Shell
+                        HQ Portal
                     </a>
                     <a
-                        href="{{ route('ui.foundation', ['portal' => 'manager']) }}"
+                        href="{{ Route::has('manager.dashboard') ? route('manager.dashboard') : route('ui.foundation', ['portal' => 'manager']) }}"
                         class="sig-btn-ghost rounded-xl px-3 py-2 font-medium"
                     >
                         Manager
                     </a>
                     <a
-                        href="{{ route('ui.foundation', ['portal' => 'cashier']) }}"
+                        href="{{ Route::has('cashier.pos') ? route('cashier.pos') : route('ui.foundation', ['portal' => 'cashier']) }}"
                         class="sig-btn-ghost rounded-xl px-3 py-2 font-medium"
                     >
-                        Cashier
+                        Cashier POS
                     </a>
                 </div>
             </div>

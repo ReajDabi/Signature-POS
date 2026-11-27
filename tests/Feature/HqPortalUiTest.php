@@ -13,6 +13,7 @@ class HqPortalUiTest extends TestCase
     #[TestWith(['hq.branches.index', '/hq/branches', 'Salon Branches', 'Tagum City Center'])]
     #[TestWith(['hq.services.index', '/hq/services', 'Global Services & BOM', 'Hair Color (Full)'])]
     #[TestWith(['hq.products.index', '/hq/products', 'Global Products', 'Hair Serum 100ml'])]
+    #[TestWith(['hq.discounts.index', '/hq/discounts', 'Global Discounts & Promos', 'Holiday Glam 15% Off'])]
     #[TestWith(['hq.users.index', '/hq/users', 'Team & Roles', 'hq@signature.test'])]
     #[TestWith(['hq.audit.index', '/hq/audit', 'Audit Log', 'Read-Only Ledger'])]
     #[TestWith(['hq.reports.index', '/hq/reports', 'Sales & Commissions', 'Commission Ledger'])]

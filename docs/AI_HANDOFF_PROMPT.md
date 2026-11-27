@@ -56,21 +56,46 @@ Always read [TEAM_AI_PROMPT.md](docs/TEAM_AI_PROMPT.md), [architecture.md](docs/
 - **Laravel Boost:** Installed `laravel/boost` (`^2.10`) with guidelines in `CLAUDE.md` and skills in `.skills/skills/`.
 
 ### UI Step 1 — UI Foundation, Dark/Light Glam Theme & Login (Completed)
-- **Assets & Theme:** `vite.config.js` (Bunny Fonts `Cormorant Garamond` & `Inter`), `resources/css/app.css` (Tailwind v4 + Light/Dark CSS tokens), `resources/js/app.js` (`Alpine.js`, `Chart.js`, theme store, `signatureThemePalette()`).
-- **Layouts & Reusable Components:** `components/layouts/{base,guest,app}.blade.php` and `components/ui/{icon,theme-toggle,section-heading,card,stat-card,low-stock-badge,status-badge,alert,modal}.blade.php`.
+- **Assets & Theme:** `vite.config.js` (Bunny Fonts `Outfit` & `DM Sans`), `resources/css/app.css` (Tailwind v4 + Light/Dark CSS tokens), `resources/js/app.js` (`Alpine.js`, `Chart.js`, theme store, `signatureThemePalette()`).
+- **Layouts & Reusable Components:** `components/layouts/{base,guest,app}.blade.php` and `components/ui/{icon,theme-toggle,section-heading,card,stat-card,low-stock-badge,status-badge,alert,notice,modal}.blade.php`.
 - **Views & Prototype Routes:** `auth/login.blade.php`, `ui/shell-preview.blade.php`, `errors/minimal.blade.php` (supporting both `ErrorResponder` props and Laravel `@section` error views), prototype routes in `routes/web.php`, and `tests/Feature/UiFoundationTest.php`.
-- **Baseline Verification:** `npm run build`, `pint`, and `26 passed (52 assertions)` in PHPUnit.
 
-### UI Step 2 — HQ Super Admin Portal UI (Completed)
+### UI Step 2 — HQ Super Admin Portal UI & Refinement (Completed)
 - **Views (`resources/views/hq/`):**
-  - `dashboard.blade.php` (`hq.dashboard`): KPI strip, 3-branch share summary cards, live Chart.js cross-branch daily revenue bar chart (7/14-day toggle) and service category doughnut chart synced with `signature:theme-changed`, 9px-radius low-stock watchlist, and 10 latest cross-branch transactions.
-  - `branches/index.blade.php` (`hq.branches.index`): Branch directory with live search/status filters, inline active/inactive toggle switches, and Add/Edit Branch modal.
-  - `services/index.blade.php` (`hq.services.index`): Master catalog (`Global` vs branch-scoped), category tabs & search, working expandable BOM rows (`service_products`), Add/Edit Service modal, and interactive BOM Recipe configurator modal.
+  - `dashboard.blade.php` (`hq.dashboard`): KPI strip, unified 3-branch summary card, live Chart.js cross-branch daily revenue bar chart (7/14-day toggle) and service category doughnut chart synced with `signature:theme-changed`, 9px-radius low-stock watchlist, and recent transactions.
+  - `branches/index.blade.php` (`hq.branches.index`): Branch directory with unified inside-card search/status filters, inline active/inactive toggle switches, and Add/Edit Branch modal.
+  - `services/index.blade.php` (`hq.services.index`): Master catalog (`Global` vs branch-scoped), category tabs & search, expandable BOM recipe rows (`service_products`), Add/Edit Service modal, and interactive recipe modal with auto-matched product units.
   - `products/index.blade.php` (`hq.products.index`): Global products directory with search/stock filters, BOM link counts, 9px-radius cross-branch health badges, and Add/Edit Product modal.
-  - `users/index.blade.php` (`hq.users.index`): Account governance table with role (`hq_admin`, `branch_manager`, `branch_cashier`), branch, and search filters plus Add/Edit User modal enforcing `branch_id = null` for HQ admins.
-  - `audit/index.blade.php` (`hq.audit.index`): Immutable audit log viewer with branch, action, search, and date range filters plus JSON `old_value`/`new_value` inspector modal.
-  - `reports/index.blade.php` (`hq.reports.index`): Cross-branch sales comparison, top services, and stacked paid/unpaid technician commission Chart.js charts + tables with Today / Last 7 Days / MTD preset switching.
-- **Routes & Navigation:** Registered `hq.*` routes in `routes/web.php`, updated brand home link in `components/layouts/app.blade.php` and prototype launcher in `auth/login.blade.php`, and added `tests/Feature/HqPortalUiTest.php`.
+  - `users/index.blade.php` (`hq.users.index`): Account governance table with role, branch, and search filters plus Add/Edit User modal enforcing `branch_id = null` for HQ admins.
+  - `audit/index.blade.php` (`hq.audit.index`): Immutable audit log viewer with search left / current date right, horizontal branch/action/date filters below, and JSON `old_value`/`new_value` inspector modal.
+  - `reports/index.blade.php` (`hq.reports.index`): Uses `<x-ui.stat-card>` + `<x-ui.notice>` + download icon, cross-branch sales comparison, top services, and stacked paid/unpaid technician commission Chart.js charts + tables with Today / 7 Days / MTD presets.
+- **Routes & Navigation:** Registered `hq.*` routes in `routes/web.php`, deduplicated desktop scope/theme controls in `components/layouts/app.blade.php`, extracted shared `<x-ui.notice />`, and verified with `tests/Feature/HqPortalUiTest.php`.
+
+### UI Step 3 — Branch Manager Portal UI (Completed)
+- **Views (`resources/views/manager/`):**
+  - `dashboard.blade.php` (`manager.dashboard`): Branch Pulse KPI strip, 7D/14D Chart.js daily revenue bar chart, top services doughnut chart, technician unpaid summary, 9px-radius Stock Watchlist, and recent branch transactions.
+  - `transactions/index.blade.php` (`manager.transactions.index`): Branch transaction ledger with search/status/date filters, Receipt Inspector modal (line items + technician commissions), and Void Transaction modal with reason logging.
+  - `inventory/index.blade.php` (`manager.inventory.index`): Summary KPIs, Stock Levels vs Movement Ledger tabs (`branch_inventory` & `inventory_logs`), 9px-radius low-stock badges, and Restock/Deduct/Threshold adjustment modal.
+  - `imports/index.blade.php` (`manager.imports.index`): CSV upload form (`restock` / `initial_stock`), import batches status table, and row-level Error Log modal.
+  - `technicians/index.blade.php` (`manager.technicians.index`): KPI summary, Commission Ledger (`unpaid`/`paid`, single + bulk `Mark Visible Paid`), and Roster & Rates tab with Add/Edit Technician modal.
+  - `catalog/index.blade.php` (`manager.catalog.index`): Branch Discounts cards (percent/flat CRUD) + HQ Global (read-only) & Branch-Only Services table and editor modal.
+  - `staff/index.blade.php` (`manager.staff.index`): Branch staff directory with role/search filters, active switches (self-disable guarded), and Branch Cashier editor modal.
+  - `audit/index.blade.php` (`manager.audit.index`): Branch-scoped read-only audit log with consistent search/date header layout and JSON Diff Inspector modal.
+
+### UI Step 4 — Branch Cashier POS UI (Completed)
+- **Views (`resources/views/cashier/`):**
+  - `pos.blade.php` (`cashier.pos`): High-speed POS Terminal with category/search service grid, 9px BOM stock indicators, sticky Order Ticket with per-line technician assignment & quantity steppers, Discount selector (Senior/PWD/Promo), centavo-safe cash tendered + denomination chips + change calculator, idempotent checkout button state, and printable Cash Receipt modal.
+  - `transactions/index.blade.php` (`cashier.transactions.index`): Shift cash summary KPIs, shift ticket search/status filters, and printable Receipt modal.
+- **Routes & Tests:** Registered `manager.*` and `cashier.*` routes in `routes/web.php`, updated `auth/login.blade.php` Demo Portals links and `components/layouts/app.blade.php` Cashier home link, and added `tests/Feature/BranchPortalUiTest.php`.
+
+### UI Step 5 — HQ Global Discounts & Promos UI (Completed)
+- **HQ View (`resources/views/hq/discounts/index.blade.php`, route `hq.discounts.index`):**
+  - Linked under HQ Master Catalog in `components/layouts/app.blade.php` and registered in `routes/web.php`.
+  - Filter tabs (`All`, `Discounts`, `Promos`, `Global`, `Branch Only`), search, KPI summary cards, active switches, and Add/Edit modal supporting `kind` (`discount` / `promo`), `type` (`percent` / `flat`), `scope` (`All Branches (Global)` vs `Single Branch`), and optional `starts_at` / `ends_at` schedule dates.
+- **Branch Reflection (`manager/catalog/index.blade.php` & `cashier/pos.blade.php`):**
+  - Manager Catalog separates `HQ Global` discounts/promos (`HQ Managed`, read-only) from editable `Branch Only` discounts/promos.
+  - Cashier POS discount selector displays active HQ Global discounts & promos alongside branch promos.
+- **Tests:** Added `hq.discounts.index` coverage to `HqPortalUiTest.php` and global promo coverage to `BranchPortalUiTest.php`.
 
 ---
 
@@ -82,14 +107,10 @@ Always read [TEAM_AI_PROMPT.md](docs/TEAM_AI_PROMPT.md), [architecture.md](docs/
 ---
 
 ## 6. Roadmap (What We Are Going To Do Next)
-### Remaining UI Phase (Interactive Blade/Alpine/Chart.js UI with clean demo data; no backend business logic yet)
-- **UI Step 3 (`reaj/frontend-manager-portal`):** Branch Manager Portal UI — Branch Dashboard (daily sales, charts, 9px low-stock alerts), Transactions & Voiding modal, Branch Inventory & Stock Ledger (restock/adjust), CSV Imports UI (upload + batch status/errors), Technicians & Commission Payouts, Branch Services & Discounts, Branch Staff, and Branch Audit Log.
-- **UI Step 4 (`reaj/frontend-cashier-pos`):** Branch Cashier POS Terminal UI — High-speed Dark/Light Glam POS Checkout (category tabs, service grid, Alpine cart with per-line technician & qty, discount selector, cash tendered & change calculator, idempotent checkout state, printable receipt modal, and Today's Shift Transactions).
-
-### Backend Phase (Feature-by-Feature after UI phase is committed)
-1. **`reaj/backend-auth`:** Real authentication, login rate-limiting, `Asia/Manila` timezone in `config/app.php`, role-based portal redirects, cleanup of UI prototype preview routes, auth tests.
-2. **`reaj/backend-hq-governance`:** HQ Branches CRUD/deactivation, Global Services + `service_products` BOM sync, Global Products CRUD, HQ Users/Roles management, Policies, FormRequests, `AuditLogger`, cross-branch tests.
+### UI Phase Complete — Ready for Backend Phase (after user commits current branch)
+1. **`reaj/backend-auth` (NEXT):** Real authentication (`AuthController` + `LoginRequest`), login rate-limiting, `Asia/Manila` timezone in `config/app.php`, role-based portal redirects (`hq_admin` -> `hq.dashboard`, `branch_manager` -> `manager.dashboard`, `branch_cashier` -> `cashier.pos`), cleanup of UI prototype preview routes, and auth tests.
+2. **`reaj/backend-hq-governance`:** HQ Branches CRUD/deactivation, Global Services + `service_products` BOM sync, Global Products CRUD, **Global Discounts & Promos** (migration making `discounts.branch_id` nullable + adding `kind`, `starts_at`, `ends_at`; `Discount` using `BranchOrGlobalScope` like `Service`), HQ Users/Roles management, Policies (`DiscountPolicy` blocking branch edits to `branch_id === null`), FormRequests, `AuditLogger`, cross-branch tests.
 3. **`reaj/backend-inventory`:** Branch Inventory restock/adjustments, `InventoryLog` ledger, queued/validated CSV `ImportBatch` (`TenantContext::run()`), Policies, cross-branch tests.
-4. **`reaj/backend-staff-pricing`:** Branch Technicians, Branch Services, Discounts, Commission payout marking, Policies, cross-branch tests.
+4. **`reaj/backend-staff-pricing`:** Branch Technicians, Branch Services, Branch Discounts/Promos (`DiscountPolicy`), Commission payout marking, Policies, cross-branch tests.
 5. **`reaj/backend-pos-checkout`:** Idempotent POS Checkout Service (`idempotency_key`, `lockForUpdate`, BOM deduction, `InventoryLog`, per-line `Commission`, `AuditLogger`), transaction voiding, checkout throttling, concurrency/idempotency/cross-branch tests.
 6. **`reaj/backend-reports-audit`:** HQ & Branch Reports (sales, commissions, stock valuation, audit log filters/exports) + full MySQL/CI verification.

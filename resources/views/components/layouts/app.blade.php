@@ -82,6 +82,7 @@
                     'items' => [
                         ['label' => 'Global Services & BOM', 'icon' => 'services', 'route' => 'hq.services.index', 'active' => 'hq.services.*'],
                         ['label' => 'Global Products', 'icon' => 'products', 'route' => 'hq.products.index', 'active' => 'hq.products.*'],
+                        ['label' => 'Discounts & Promos', 'icon' => 'discounts', 'route' => 'hq.discounts.index', 'active' => 'hq.discounts.*'],
                     ],
                 ],
                 [
@@ -121,14 +122,17 @@
         {{-- Sidebar navigation --}}
         <aside
             :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'"
-            class="sig-sidebar fixed inset-y-0 left-0 z-50 flex w-72 shrink-0 flex-col border-r transition-transform duration-200 lg:static"
+            class="sig-sidebar fixed inset-y-0 left-0 z-50 flex w-64 shrink-0 flex-col border-r transition-transform duration-200 lg:static"
         >
             {{-- Brand header --}}
             <div class="flex items-center justify-between gap-3 border-b border-theme px-5 py-5">
                 @php
-                    $homeUrl = Route::has($portal.'.dashboard')
-                        ? route($portal.'.dashboard')
-                        : (Route::has('ui.foundation') ? route('ui.foundation', ['portal' => $portal]) : url('/'));
+                    $homeUrl = match (true) {
+                        Route::has($portal.'.dashboard') => route($portal.'.dashboard'),
+                        $portal === 'cashier' && Route::has('cashier.pos') => route('cashier.pos'),
+                        Route::has('ui.foundation') => route('ui.foundation', ['portal' => $portal]),
+                        default => url('/'),
+                    };
                 @endphp
                 <a href="{{ $homeUrl }}" class="flex items-center gap-3 min-w-0">
                     <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-theme-strong bg-gold-soft font-display text-xl font-bold text-gold-accent">
@@ -154,8 +158,8 @@
                 </button>
             </div>
 
-            {{-- Active branch / scope pill --}}
-            <div class="px-4 pt-4">
+            {{-- Active branch / scope pill (mobile drawer only; desktop displays in header) --}}
+            <div class="px-4 pt-4 sm:hidden">
                 <div class="sig-elevated flex items-center justify-between gap-2 rounded-xl px-3.5 py-2.5">
                     <p class="truncate text-xs font-semibold text-theme-primary">
                         {{ $portalMeta['scopeBadge'] }}
@@ -216,13 +220,13 @@
                 </div>
 
                 <div class="flex items-center gap-2">
-                    <x-ui.theme-toggle class="flex-1" />
+                    <x-ui.theme-toggle class="flex-1 sm:hidden" />
 
-                    <form method="POST" action="{{ route('logout') }}">
+                    <form method="POST" action="{{ route('logout') }}" class="flex-1 sm:flex-initial sm:w-full">
                         @csrf
                         <button
                             type="submit"
-                            class="sig-btn-ghost inline-flex items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-xs font-medium text-theme-secondary hover:text-rose-500 cursor-pointer"
+                            class="sig-btn-ghost inline-flex w-full items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-xs font-medium text-theme-secondary hover:text-rose-500 cursor-pointer"
                             title="Sign out"
                         >
                             <x-ui.icon name="logout" class="h-4 w-4" />

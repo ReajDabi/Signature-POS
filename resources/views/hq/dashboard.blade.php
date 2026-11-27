@@ -108,7 +108,7 @@
 
         {{-- Group 2: Revenue Analytics --}}
         <section class="space-y-4">
-            <x-ui.section-heading eyebrow="Analytics" title="Sales &amp; Service Mix" />
+            <x-ui.section-heading eyebrow="Analytics" title="Sales & Service Mix" />
 
             <div class="grid grid-cols-1 gap-5 xl:grid-cols-5">
                 <x-ui.card
@@ -166,7 +166,7 @@
 
         {{-- Group 3: Operations & Activity --}}
         <section class="space-y-4">
-            <x-ui.section-heading eyebrow="Operations" title="Alerts &amp; Recent Activity" />
+            <x-ui.section-heading eyebrow="Operations" title="Alerts & Recent Activity" />
 
             <div class="grid grid-cols-1 gap-5 xl:grid-cols-12">
                 <x-ui.card title="Low-Stock Watchlist" class="xl:col-span-5">

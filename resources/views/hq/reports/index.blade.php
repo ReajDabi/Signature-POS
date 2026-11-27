@@ -104,7 +104,7 @@
                         x-on:click="exportNotice = `CSV exported for ${activePreset.label}.`"
                         class="sig-btn-ghost inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-medium cursor-pointer"
                     >
-                        <x-ui.icon name="import" class="h-4 w-4 text-gold-accent" />
+                        <x-ui.icon name="download" class="h-4 w-4 text-gold-accent" />
                         <span>Export CSV</span>
                     </button>
                 </x-slot:actions>
@@ -145,41 +145,13 @@
                 </div>
             </div>
 
-            <div
-                x-show="exportNotice"
-                x-cloak
-                class="flex items-center justify-between gap-3 rounded-xl border border-emerald-500/35 bg-emerald-500/10 px-4 py-3 text-xs text-emerald-800 dark:text-emerald-200"
-            >
-                <div class="flex items-center gap-2.5">
-                    <x-ui.icon name="check" class="h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
-                    <span x-text="exportNotice"></span>
-                </div>
-                <button type="button" x-on:click="exportNotice = null" class="text-theme-muted hover:text-theme-primary cursor-pointer" aria-label="Dismiss">
-                    <x-ui.icon name="close" class="h-4 w-4" />
-                </button>
-            </div>
+            <x-ui.notice model="exportNotice" />
 
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                <div class="sig-card rounded-2xl p-5 space-y-1.5">
-                    <p class="text-xs font-medium text-theme-secondary">Gross Sales</p>
-                    <p class="font-display text-2xl sm:text-[1.75rem] font-semibold tabular-nums text-theme-primary" x-text="activePreset.kpis.gross"></p>
-                    <p class="text-xs text-theme-muted" x-text="activePreset.label"></p>
-                </div>
-                <div class="sig-card rounded-2xl p-5 space-y-1.5">
-                    <p class="text-xs font-medium text-theme-secondary">Discounts</p>
-                    <p class="font-display text-2xl sm:text-[1.75rem] font-semibold tabular-nums text-theme-primary" x-text="activePreset.kpis.discounts"></p>
-                    <p class="text-xs text-theme-muted">Senior · PWD · Promo</p>
-                </div>
-                <div class="sig-card rounded-2xl p-5 space-y-1.5">
-                    <p class="text-xs font-medium text-theme-secondary">Net Revenue</p>
-                    <p class="font-display text-2xl sm:text-[1.75rem] font-semibold tabular-nums text-gold-accent" x-text="activePreset.kpis.net"></p>
-                    <p class="text-xs text-theme-muted">Cash collected</p>
-                </div>
-                <div class="sig-card rounded-2xl p-5 space-y-1.5">
-                    <p class="text-xs font-medium text-theme-secondary">Commissions</p>
-                    <p class="font-display text-2xl sm:text-[1.75rem] font-semibold tabular-nums text-theme-primary" x-text="activePreset.kpis.commissions"></p>
-                    <p class="text-xs text-theme-muted">Technician earnings</p>
-                </div>
+                <x-ui.stat-card label="Gross Sales" valueBind="activePreset.kpis.gross" hintBind="activePreset.label" icon="cash" />
+                <x-ui.stat-card label="Discounts" valueBind="activePreset.kpis.discounts" hint="Senior · PWD · Promo" icon="discounts" />
+                <x-ui.stat-card label="Net Revenue" valueBind="activePreset.kpis.net" valueTone="gold" hint="Cash collected" icon="sparkle" />
+                <x-ui.stat-card label="Commissions" valueBind="activePreset.kpis.commissions" hint="Technician earnings" icon="technicians" />
             </div>
         </section>
 
