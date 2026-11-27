@@ -39,3 +39,21 @@ Route::prefix('hq')->name('hq.')->group(function (): void {
     Route::get('/audit', fn (): View => view('hq.audit.index'))->name('audit.index');
     Route::get('/reports', fn (): View => view('hq.reports.index'))->name('reports.index');
 });
+
+// Branch Manager Portal UI routes (UI Step 3 prototype views)
+Route::prefix('manager')->name('manager.')->group(function (): void {
+    Route::get('/', fn (): View => view('manager.dashboard'))->name('dashboard');
+    Route::get('/transactions', fn (): View => view('manager.transactions.index'))->name('transactions.index');
+    Route::get('/inventory', fn (): View => view('manager.inventory.index'))->name('inventory.index');
+    Route::get('/imports', fn (): View => view('manager.imports.index'))->name('imports.index');
+    Route::get('/technicians', fn (): View => view('manager.technicians.index'))->name('technicians.index');
+    Route::get('/catalog', fn (): View => view('manager.catalog.index'))->name('catalog.index');
+    Route::get('/staff', fn (): View => view('manager.staff.index'))->name('staff.index');
+    Route::get('/audit', fn (): View => view('manager.audit.index'))->name('audit.index');
+});
+
+// Branch Cashier POS UI routes (UI Step 4 prototype views)
+Route::prefix('cashier')->name('cashier.')->group(function (): void {
+    Route::get('/', fn (): View => view('cashier.pos'))->name('pos');
+    Route::get('/transactions', fn (): View => view('cashier.transactions.index'))->name('transactions.index');
+});

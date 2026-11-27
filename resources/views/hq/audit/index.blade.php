@@ -159,7 +159,7 @@
                         class="sig-input w-full rounded-xl py-2 pl-9 pr-3 text-xs"
                     >
                 </div>
-                <div class="text-sm text-gray-500">
+                <div class="text-xs font-medium text-theme-muted">
                     {{ now()->format('F j, Y') }}
                 </div>
             </div>
