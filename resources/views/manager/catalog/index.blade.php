@@ -1,9 +1,11 @@
 <x-layouts.app title="Services & Discounts" portal="manager" branchLabel="Tagum City Center · TCC">
     @php
         $initialDiscounts = [
-            ['id' => 1, 'label' => 'Senior citizen 20%', 'type' => 'percent', 'value' => '20.00', 'is_active' => true],
-            ['id' => 2, 'label' => 'PWD 20%', 'type' => 'percent', 'value' => '20.00', 'is_active' => true],
-            ['id' => 3, 'label' => 'Promo 100 off', 'type' => 'flat', 'value' => '100.00', 'is_active' => true],
+            ['id' => 1, 'label' => 'Senior citizen 20%', 'kind' => 'discount', 'type' => 'percent', 'value' => '20.00', 'scope' => 'global', 'schedule' => 'Always valid', 'is_active' => true],
+            ['id' => 2, 'label' => 'PWD 20%', 'kind' => 'discount', 'type' => 'percent', 'value' => '20.00', 'scope' => 'global', 'schedule' => 'Always valid', 'is_active' => true],
+            ['id' => 3, 'label' => 'Holiday Glam 15% Off', 'kind' => 'promo', 'type' => 'percent', 'value' => '15.00', 'scope' => 'global', 'schedule' => '2026-11-25 → 2026-12-31', 'is_active' => true],
+            ['id' => 4, 'label' => 'Payday ₱150 Off', 'kind' => 'promo', 'type' => 'flat', 'value' => '150.00', 'scope' => 'global', 'schedule' => '2026-11-28 → 2026-11-30', 'is_active' => true],
+            ['id' => 5, 'label' => 'Promo 100 off', 'kind' => 'promo', 'type' => 'flat', 'value' => '100.00', 'scope' => 'branch', 'schedule' => 'Always valid', 'is_active' => true],
         ];
 
         $initialServices = [
@@ -23,15 +25,19 @@
         x-data="{
             discounts: @js($initialDiscounts),
             services: @js($initialServices),
+            discountScope: 'all',
             scopeFilter: 'all',
             search: '',
             notice: null,
             editingDiscountId: null,
             editingServiceId: null,
-            discountForm: { label: '', type: 'percent', value: '10.00', is_active: true },
+            discountForm: { label: '', kind: 'promo', type: 'percent', value: '10.00', is_active: true },
             serviceForm: { name: '', category: 'Hair', price: '500.00', duration_min: 45, is_active: true },
             formatPeso(val) {
                 return '₱ ' + Number(val || 0).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            },
+            get filteredDiscounts() {
+                return this.discounts.filter((d) => this.discountScope === 'all' || d.scope === this.discountScope);
             },
             get filteredServices() {
                 const q = this.search.trim().toLowerCase();
@@ -43,22 +49,23 @@
             },
             openDiscountCreate() {
                 this.editingDiscountId = null;
-                this.discountForm = { label: '', type: 'percent', value: '10.00', is_active: true };
+                this.discountForm = { label: '', kind: 'promo', type: 'percent', value: '10.00', is_active: true };
                 $dispatch('open-modal', 'discount-editor');
             },
             openDiscountEdit(d) {
+                if (d.scope !== 'branch') return;
                 this.editingDiscountId = d.id;
-                this.discountForm = { label: d.label, type: d.type, value: d.value, is_active: d.is_active };
+                this.discountForm = { label: d.label, kind: d.kind, type: d.type, value: d.value, is_active: d.is_active };
                 $dispatch('open-modal', 'discount-editor');
             },
             saveDiscount() {
                 if (!this.discountForm.label.trim()) return;
                 if (this.editingDiscountId) {
                     const d = this.discounts.find((x) => x.id === this.editingDiscountId);
-                    if (d) Object.assign(d, { label: this.discountForm.label.trim(), type: this.discountForm.type, value: Number(this.discountForm.value).toFixed(2), is_active: this.discountForm.is_active });
+                    if (d && d.scope === 'branch') Object.assign(d, { label: this.discountForm.label.trim(), kind: this.discountForm.kind, type: this.discountForm.type, value: Number(this.discountForm.value).toFixed(2), is_active: this.discountForm.is_active });
                     this.notice = `${this.discountForm.label.trim()} updated.`;
                 } else {
-                    this.discounts.push({ id: Date.now(), label: this.discountForm.label.trim(), type: this.discountForm.type, value: Number(this.discountForm.value).toFixed(2), is_active: this.discountForm.is_active });
+                    this.discounts.push({ id: Date.now(), label: this.discountForm.label.trim(), kind: this.discountForm.kind, type: this.discountForm.type, value: Number(this.discountForm.value).toFixed(2), scope: 'branch', schedule: 'Always valid', is_active: this.discountForm.is_active });
                     this.notice = `${this.discountForm.label.trim()} added.`;
                 }
                 $dispatch('close-modal', 'discount-editor');
@@ -91,45 +98,66 @@
     >
         <x-ui.notice />
 
-        {{-- Section 1: Branch Discounts --}}
+        {{-- Section 1: Discounts & Promos --}}
         <section class="space-y-4">
             <x-ui.section-heading eyebrow="Pricing" title="Branch Discounts">
                 <x-slot:actions>
+                    <div class="inline-flex rounded-xl border border-theme bg-theme-elevated p-0.5 text-xs">
+                        <button type="button" x-on:click="discountScope = 'all'" :class="discountScope === 'all' ? 'bg-gold-soft text-gold-accent border border-theme-strong' : 'text-theme-secondary border border-transparent'" class="rounded-lg px-2.5 py-1 font-medium cursor-pointer transition">All</button>
+                        <button type="button" x-on:click="discountScope = 'global'" :class="discountScope === 'global' ? 'bg-gold-soft text-gold-accent border border-theme-strong' : 'text-theme-secondary border border-transparent'" class="rounded-lg px-2.5 py-1 font-medium cursor-pointer transition">HQ Global</button>
+                        <button type="button" x-on:click="discountScope = 'branch'" :class="discountScope === 'branch' ? 'bg-gold-soft text-gold-accent border border-theme-strong' : 'text-theme-secondary border border-transparent'" class="rounded-lg px-2.5 py-1 font-medium cursor-pointer transition">Branch Only</button>
+                    </div>
                     <button type="button" x-on:click="openDiscountCreate()" class="sig-btn-gold inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs cursor-pointer">
                         <x-ui.icon name="plus" class="h-4 w-4" />
-                        <span>Add Discount</span>
+                        <span>Add Branch Rule</span>
                     </button>
                 </x-slot:actions>
             </x-ui.section-heading>
 
             <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-                <template x-for="d in discounts" :key="d.id">
+                <template x-for="d in filteredDiscounts" :key="d.id">
                     <div class="sig-card rounded-2xl p-5 flex flex-col justify-between gap-4">
                         <div class="flex items-start justify-between gap-3">
-                            <div>
-                                <p class="text-sm font-semibold text-theme-primary" x-text="d.label"></p>
-                                <p class="mt-1 font-display text-2xl font-semibold text-gold-accent tabular-nums" x-text="d.type === 'percent' ? Number(d.value) + '% off' : formatPeso(d.value) + ' off'"></p>
+                            <div class="min-w-0">
+                                <div class="flex flex-wrap items-center gap-1.5">
+                                    <span
+                                        class="inline-flex items-center rounded-md border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider"
+                                        :class="d.scope === 'global' ? 'border-gold-500/30 bg-gold-soft text-gold-accent' : 'border-theme-strong bg-theme-elevated text-theme-muted'"
+                                        x-text="d.scope === 'global' ? 'HQ Global' : 'TCC'"
+                                    ></span>
+                                    <span class="text-[11px] uppercase tracking-wider text-theme-muted" x-text="d.kind"></span>
+                                </div>
+                                <p class="mt-2 truncate text-sm font-semibold text-theme-primary" x-text="d.label"></p>
+                                <p class="mt-0.5 font-display text-2xl font-semibold text-gold-accent tabular-nums" x-text="d.type === 'percent' ? Number(d.value) + '% off' : formatPeso(d.value) + ' off'"></p>
+                                <p class="mt-1 font-mono text-[11px] text-theme-muted" x-text="d.schedule"></p>
                             </div>
                             <span
-                                class="inline-flex items-center rounded-lg border px-2 py-0.5 text-[11px] font-medium"
+                                class="inline-flex shrink-0 items-center rounded-lg border px-2 py-0.5 text-[11px] font-medium"
                                 :class="d.is_active ? 'border-emerald-500/35 bg-emerald-500/12 text-emerald-700 dark:text-emerald-300' : 'border-rose-500/35 bg-rose-500/12 text-rose-700 dark:text-rose-300'"
                                 x-text="d.is_active ? 'Active' : 'Inactive'"
                             ></span>
                         </div>
                         <div class="flex items-center justify-between border-t border-theme pt-3">
-                            <button
-                                type="button"
-                                x-on:click="d.is_active = !d.is_active"
-                                class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors"
-                                :class="d.is_active ? 'bg-emerald-500' : 'bg-theme-elevated'"
-                                role="switch"
-                                :aria-checked="d.is_active.toString()"
-                            >
-                                <span class="pointer-events-none inline-block h-4 w-4 rounded-full bg-white shadow transition-transform" :class="d.is_active ? 'translate-x-4' : 'translate-x-0'"></span>
-                            </button>
-                            <button type="button" x-on:click="openDiscountEdit(d)" class="text-xs font-medium text-gold-accent hover:underline cursor-pointer">
-                                Edit
-                            </button>
+                            <template x-if="d.scope === 'branch'">
+                                <div class="flex w-full items-center justify-between">
+                                    <button
+                                        type="button"
+                                        x-on:click="d.is_active = !d.is_active"
+                                        class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors"
+                                        :class="d.is_active ? 'bg-emerald-500' : 'bg-theme-elevated'"
+                                        role="switch"
+                                        :aria-checked="d.is_active.toString()"
+                                    >
+                                        <span class="pointer-events-none inline-block h-4 w-4 rounded-full bg-white shadow transition-transform" :class="d.is_active ? 'translate-x-4' : 'translate-x-0'"></span>
+                                    </button>
+                                    <button type="button" x-on:click="openDiscountEdit(d)" class="text-xs font-medium text-gold-accent hover:underline cursor-pointer">
+                                        Edit
+                                    </button>
+                                </div>
+                            </template>
+                            <template x-if="d.scope === 'global'">
+                                <span class="text-xs text-theme-muted">HQ Managed · Auto-applied across branches</span>
+                            </template>
                         </div>
                     </div>
                 </template>
@@ -208,16 +236,23 @@
             </x-ui.card>
         </section>
 
-        <x-ui.modal name="discount-editor" title="Branch Discount" maxWidth="max-w-md">
+        <x-ui.modal name="discount-editor" title="Branch Discount or Promo" maxWidth="max-w-md">
             <form x-on:submit.prevent="saveDiscount()" class="space-y-4">
                 <div>
                     <label class="mb-1.5 block text-xs font-medium text-theme-secondary">Label</label>
-                    <input type="text" x-model="discountForm.label" required placeholder="Senior citizen 20%" class="sig-input w-full rounded-xl px-3.5 py-2.5 text-sm">
+                    <input type="text" x-model="discountForm.label" required placeholder="Promo 100 off" class="sig-input w-full rounded-xl px-3.5 py-2.5 text-sm">
                 </div>
-                <div class="grid grid-cols-2 gap-3">
+                <div class="grid grid-cols-3 gap-3">
+                    <div>
+                        <label class="mb-1.5 block text-xs font-medium text-theme-secondary">Kind</label>
+                        <select x-model="discountForm.kind" class="sig-input w-full rounded-xl px-3 py-2.5 text-sm">
+                            <option value="discount">Discount</option>
+                            <option value="promo">Promo</option>
+                        </select>
+                    </div>
                     <div>
                         <label class="mb-1.5 block text-xs font-medium text-theme-secondary">Type</label>
-                        <select x-model="discountForm.type" class="sig-input w-full rounded-xl px-3.5 py-2.5 text-sm">
+                        <select x-model="discountForm.type" class="sig-input w-full rounded-xl px-3 py-2.5 text-sm">
                             <option value="percent">Percent (%)</option>
                             <option value="flat">Flat (₱)</option>
                         </select>

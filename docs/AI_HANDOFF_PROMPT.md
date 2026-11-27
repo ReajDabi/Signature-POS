@@ -88,6 +88,15 @@ Always read [TEAM_AI_PROMPT.md](docs/TEAM_AI_PROMPT.md), [architecture.md](docs/
   - `transactions/index.blade.php` (`cashier.transactions.index`): Shift cash summary KPIs, shift ticket search/status filters, and printable Receipt modal.
 - **Routes & Tests:** Registered `manager.*` and `cashier.*` routes in `routes/web.php`, updated `auth/login.blade.php` Demo Portals links and `components/layouts/app.blade.php` Cashier home link, and added `tests/Feature/BranchPortalUiTest.php`.
 
+### UI Step 5 — HQ Global Discounts & Promos UI (Completed)
+- **HQ View (`resources/views/hq/discounts/index.blade.php`, route `hq.discounts.index`):**
+  - Linked under HQ Master Catalog in `components/layouts/app.blade.php` and registered in `routes/web.php`.
+  - Filter tabs (`All`, `Discounts`, `Promos`, `Global`, `Branch Only`), search, KPI summary cards, active switches, and Add/Edit modal supporting `kind` (`discount` / `promo`), `type` (`percent` / `flat`), `scope` (`All Branches (Global)` vs `Single Branch`), and optional `starts_at` / `ends_at` schedule dates.
+- **Branch Reflection (`manager/catalog/index.blade.php` & `cashier/pos.blade.php`):**
+  - Manager Catalog separates `HQ Global` discounts/promos (`HQ Managed`, read-only) from editable `Branch Only` discounts/promos.
+  - Cashier POS discount selector displays active HQ Global discounts & promos alongside branch promos.
+- **Tests:** Added `hq.discounts.index` coverage to `HqPortalUiTest.php` and global promo coverage to `BranchPortalUiTest.php`.
+
 ---
 
 ## 5. Team Git & Step-by-Step Execution Workflow
@@ -100,8 +109,8 @@ Always read [TEAM_AI_PROMPT.md](docs/TEAM_AI_PROMPT.md), [architecture.md](docs/
 ## 6. Roadmap (What We Are Going To Do Next)
 ### UI Phase Complete — Ready for Backend Phase (after user commits current branch)
 1. **`reaj/backend-auth` (NEXT):** Real authentication (`AuthController` + `LoginRequest`), login rate-limiting, `Asia/Manila` timezone in `config/app.php`, role-based portal redirects (`hq_admin` -> `hq.dashboard`, `branch_manager` -> `manager.dashboard`, `branch_cashier` -> `cashier.pos`), cleanup of UI prototype preview routes, and auth tests.
-2. **`reaj/backend-hq-governance`:** HQ Branches CRUD/deactivation, Global Services + `service_products` BOM sync, Global Products CRUD, HQ Users/Roles management, Policies, FormRequests, `AuditLogger`, cross-branch tests.
+2. **`reaj/backend-hq-governance`:** HQ Branches CRUD/deactivation, Global Services + `service_products` BOM sync, Global Products CRUD, **Global Discounts & Promos** (migration making `discounts.branch_id` nullable + adding `kind`, `starts_at`, `ends_at`; `Discount` using `BranchOrGlobalScope` like `Service`), HQ Users/Roles management, Policies (`DiscountPolicy` blocking branch edits to `branch_id === null`), FormRequests, `AuditLogger`, cross-branch tests.
 3. **`reaj/backend-inventory`:** Branch Inventory restock/adjustments, `InventoryLog` ledger, queued/validated CSV `ImportBatch` (`TenantContext::run()`), Policies, cross-branch tests.
-4. **`reaj/backend-staff-pricing`:** Branch Technicians, Branch Services, Discounts, Commission payout marking, Policies, cross-branch tests.
+4. **`reaj/backend-staff-pricing`:** Branch Technicians, Branch Services, Branch Discounts/Promos (`DiscountPolicy`), Commission payout marking, Policies, cross-branch tests.
 5. **`reaj/backend-pos-checkout`:** Idempotent POS Checkout Service (`idempotency_key`, `lockForUpdate`, BOM deduction, `InventoryLog`, per-line `Commission`, `AuditLogger`), transaction voiding, checkout throttling, concurrency/idempotency/cross-branch tests.
 6. **`reaj/backend-reports-audit`:** HQ & Branch Reports (sales, commissions, stock valuation, audit log filters/exports) + full MySQL/CI verification.

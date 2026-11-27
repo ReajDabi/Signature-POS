@@ -82,6 +82,7 @@
                     'items' => [
                         ['label' => 'Global Services & BOM', 'icon' => 'services', 'route' => 'hq.services.index', 'active' => 'hq.services.*'],
                         ['label' => 'Global Products', 'icon' => 'products', 'route' => 'hq.products.index', 'active' => 'hq.products.*'],
+                        ['label' => 'Discounts & Promos', 'icon' => 'discounts', 'route' => 'hq.discounts.index', 'active' => 'hq.discounts.*'],
                     ],
                 ],
                 [

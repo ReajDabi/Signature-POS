@@ -35,6 +35,7 @@ Route::prefix('hq')->name('hq.')->group(function (): void {
     Route::get('/branches', fn (): View => view('hq.branches.index'))->name('branches.index');
     Route::get('/services', fn (): View => view('hq.services.index'))->name('services.index');
     Route::get('/products', fn (): View => view('hq.products.index'))->name('products.index');
+    Route::get('/discounts', fn (): View => view('hq.discounts.index'))->name('discounts.index');
     Route::get('/users', fn (): View => view('hq.users.index'))->name('users.index');
     Route::get('/audit', fn (): View => view('hq.audit.index'))->name('audit.index');
     Route::get('/reports', fn (): View => view('hq.reports.index'))->name('reports.index');

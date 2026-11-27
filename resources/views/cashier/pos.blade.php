@@ -20,10 +20,12 @@
         ];
 
         $discounts = [
-            ['id' => 0, 'label' => 'No Discount', 'type' => 'none', 'value' => 0],
-            ['id' => 1, 'label' => 'Senior citizen 20%', 'type' => 'percent', 'value' => 20],
-            ['id' => 2, 'label' => 'PWD 20%', 'type' => 'percent', 'value' => 20],
-            ['id' => 3, 'label' => 'Promo 100 off', 'type' => 'flat', 'value' => 100],
+            ['id' => 0, 'label' => 'No Discount', 'scope' => 'none', 'type' => 'none', 'value' => 0],
+            ['id' => 1, 'label' => 'Senior citizen 20%', 'scope' => 'global', 'type' => 'percent', 'value' => 20],
+            ['id' => 2, 'label' => 'PWD 20%', 'scope' => 'global', 'type' => 'percent', 'value' => 20],
+            ['id' => 3, 'label' => 'Holiday Glam 15% Off (HQ Promo)', 'scope' => 'global', 'type' => 'percent', 'value' => 15],
+            ['id' => 4, 'label' => 'Payday ₱150 Off (HQ Promo)', 'scope' => 'global', 'type' => 'flat', 'value' => 150],
+            ['id' => 5, 'label' => 'Promo 100 off (Branch)', 'scope' => 'branch', 'type' => 'flat', 'value' => 100],
         ];
     @endphp
 
