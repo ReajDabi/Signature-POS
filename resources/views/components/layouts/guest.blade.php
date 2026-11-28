@@ -4,10 +4,9 @@
 
 <x-layouts.base :title="$title">
     <div class="relative min-h-screen overflow-hidden flex flex-col justify-between px-4 py-6 sm:px-6 lg:px-8">
-        {{-- Ambient champagne aura --}}
-        <div class="pointer-events-none fixed inset-0 overflow-hidden" aria-hidden="true">
-            <div class="absolute -top-36 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-[#d9b77a]/12 blur-3xl"></div>
-            <div class="absolute -bottom-40 right-1/4 h-80 w-80 rounded-full bg-[#d9b77a]/8 blur-3xl"></div>
+        <div class="pointer-events-none fixed inset-0 z-0 bg-[#faf7f2] bg-cover bg-center bg-no-repeat"
+            style="background-image: url('{{ asset('images/login-background.png') }}')" aria-hidden="true">
+            <div class="absolute inset-0 bg-[#eadcc3]/35 dark:bg-[#0e0e10]/75"></div>
         </div>
 
         <header class="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-between gap-4">
@@ -34,7 +33,6 @@
 
         <footer class="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-2 border-t border-theme pt-4 text-xs text-theme-muted sm:flex-row">
             <p>Signature Salon &amp; Nail Spa · Tagum City</p>
-            <p>PHP (₱) · PHT</p>
         </footer>
     </div>
 </x-layouts.base>
