@@ -57,7 +57,7 @@
                 </div>
 
                 <button type="submit"
-                    class="sig-btn-gold w-full rounded-xl px-5 py-3 text-sm tracking-wide cursor-pointer shadow-sm">
+                    class="sig-btn-login w-full rounded-xl px-5 py-3 text-sm tracking-wide cursor-pointer shadow-sm">
                     Sign In to Signature POS
                 </button>
             </form>

@@ -131,6 +131,22 @@
         transform: translateY(0.5px);
     }
 
+    .sig-btn-login {
+        background-color: #caa35e;
+        color: #16161a;
+        font-weight: 600;
+        transition: background-color 150ms ease, transform 150ms ease, box-shadow 150ms ease;
+    }
+
+    .sig-btn-login:hover {
+        background-color: #c39a54;
+    }
+
+    .sig-btn-login:active {
+        background-color: #e2ab52;
+        transform: translateY(0.5px);
+    }
+
     .sig-btn-ghost {
         background-color: transparent;
         border: 1px solid var(--border-subtle);
